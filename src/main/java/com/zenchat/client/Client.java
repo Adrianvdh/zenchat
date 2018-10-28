@@ -3,6 +3,8 @@ package com.zenchat.client;
 import com.zenchat.common.messaging.AckMessage;
 import com.zenchat.common.messaging.Message;
 import com.zenchat.common.messaging.protocol.Initialize;
+import com.zenchat.model.api.registration.RegisterUserRequest;
+import com.zenchat.model.api.registration.UserRegisterResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,17 +59,23 @@ public class Client {
             apply(initializeMessage);
             unAcknowledgedMessageIds.add(initializeMessage.getIdentifier());
 
-            Message<AckMessage> message = null;
+            Message<?> message = null;
             try {
                 message = waitForServerResponse();
             } catch (IOException e) {
                 logger.error("Failed to get response from server!", e);
             }
+            if(Throwable.class.isAssignableFrom(message.getPayloadType())) {
+                Throwable throwable = (Throwable) message.getPayload();
+                throw new RuntimeException(throwable);
+            }
 
+            Message<AckMessage> ackMessage = (Message<AckMessage>) message;
             String initializeMessageId = unAcknowledgedMessageIds.get(0);
-            String ackId = message.getPayload().getIdentifier();
+            String ackId = ackMessage.getPayload().getIdentifier();
+
             if (initializeMessageId.equals(ackId) && onConnect != null) {
-                onConnect.accept(message.getPayload());
+                onConnect.accept(ackMessage.getPayload());
             }
             unAcknowledgedMessageIds.remove(ackId);
 
@@ -80,6 +88,24 @@ public class Client {
         } else {
             throw new ClientException("Cannot connect client that is already connected!");
         }
+    }
+
+    public <T, R> Future<Message<R>> send(Message<T> message) {
+        apply(message);
+        unAcknowledgedMessageIds.add(message.getIdentifier());
+
+        return executorService.submit(() -> {
+            Message response = null;
+            try {
+                response = waitForServerResponse();
+            } catch (IOException e) {
+                logger.error("An I/O error occurred between the client and server!", e);
+            }
+
+            unAcknowledgedMessageIds.remove(response.getCorrelationId());
+            return response;
+        });
+
     }
 
     private <T> Message<T> waitForServerResponse() throws IOException {
