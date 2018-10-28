@@ -1,14 +1,11 @@
 package com.zenchat.server;
 
 import com.zenchat.common.messaging.AckMessage;
-import com.zenchat.common.messaging.ClientMessageException;
 import com.zenchat.common.messaging.Headers;
 import com.zenchat.common.messaging.Message;
 import com.zenchat.common.messaging.protocol.Initialize;
-import com.zenchat.model.api.registration.RegisterUserRequest;
-import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.requesthandler.MessageHandlerRegister;
-import com.zenchat.server.requesthandler.MessageHandlerRegisterSingleton;
+import com.zenchat.server.requesthandler.RequestHandlerRegister;
+import com.zenchat.server.requesthandler.RequestHandlerRegisterSingleton;
 import com.zenchat.server.requesthandler.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -21,7 +18,7 @@ import static com.zenchat.common.messaging.MessageHeadersProperties.SESSION_ID;
 @Slf4j
 public class MessageDelegatingHandler {
 
-    private MessageHandlerRegister messageHandlerRegister = MessageHandlerRegisterSingleton.getInstance().getHandlerRegister();
+    private RequestHandlerRegister messageHandlerRegister = RequestHandlerRegisterSingleton.getInstance().getHandlerRegister();
 
     private ObjectOutputStream out;
 

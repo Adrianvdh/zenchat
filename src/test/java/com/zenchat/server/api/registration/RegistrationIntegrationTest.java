@@ -1,4 +1,4 @@
-package com.zenchat;
+package com.zenchat.server.api.registration;
 
 import com.zenchat.client.Client;
 import com.zenchat.common.messaging.Message;
@@ -13,7 +13,7 @@ import org.junit.Test;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class RegistrationTest {
+public class RegistrationIntegrationTest {
 
     private static String HOST = "localhost";
     private static int PORT = 34567;

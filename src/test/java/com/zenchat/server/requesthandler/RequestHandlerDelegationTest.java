@@ -1,13 +1,12 @@
-package com.zenchat;
+package com.zenchat.server.requesthandler;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.api.registration.UserRegistrationHandler;
-import com.zenchat.server.requesthandler.*;
 import org.junit.Assert;
 import org.junit.Test;
 
-public class EventHandlerDelegationTest {
+public class RequestHandlerDelegationTest {
 
     @Test
     public void testHandleMessageDelegation() {
@@ -21,7 +20,7 @@ public class EventHandlerDelegationTest {
 
     @Test
     public void testChooseMessageHandlerByRequest_expectCorrectHandlerSelected() {
-        MessageHandlerRegister messageHandlerRegister = new MessageHandlerRegister();
+        RequestHandlerRegister messageHandlerRegister = new RequestHandlerRegister();
 
         RequestHandler registrationHandler = messageHandlerRegister.getHandler(RegisterUserRequest.class);
 
@@ -30,23 +29,23 @@ public class EventHandlerDelegationTest {
 
     @Test(expected = RequestHandlerException.class)
     public void testChooseMessageHandler_handlerNotFound_expectHandlerNotFoundException() {
-        MessageHandlerRegister messageHandlerRegister = new MessageHandlerRegister();
+        RequestHandlerRegister messageHandlerRegister = new RequestHandlerRegister();
 
         messageHandlerRegister.getHandler(Object.class);
     }
 
     @Test(expected = RequestHandlerException.class)
     public void testChooseMessageHandler_handlerIsNull_expectHandlerNotFoundException() {
-        MessageHandlerRegister messageHandlerRegister = new MessageHandlerRegister();
+        RequestHandlerRegister messageHandlerRegister = new RequestHandlerRegister();
 
         messageHandlerRegister.getHandler(null);
     }
 
     @Test
     public void testGetMessageHandlerRegisterSingleton() {
-        MessageHandlerRegisterSingleton instance = MessageHandlerRegisterSingleton.getInstance();
+        RequestHandlerRegisterSingleton instance = RequestHandlerRegisterSingleton.getInstance();
 
-        MessageHandlerRegister handlerRegister = instance.getHandlerRegister();
+        RequestHandlerRegister handlerRegister = instance.getHandlerRegister();
 
         Assert.assertNotNull(handlerRegister);
     }
