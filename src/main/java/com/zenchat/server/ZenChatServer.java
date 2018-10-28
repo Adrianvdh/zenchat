@@ -9,6 +9,7 @@ import com.zenchat.server.repository.HsqldbConnection;
 import com.zenchat.server.repository.Repository;
 import com.zenchat.server.message.MessageHandler;
 import com.zenchat.server.message.MessageHandlerException;
+import com.zenchat.server.repository.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.sql.Connection;
@@ -22,8 +23,11 @@ public class ZenChatServer {
     private static Map<Class, Repository> repositories = new HashMap<>();
     private static Map<Class, MessageHandler> handlers = new HashMap<>();
 
-    public static Repository getRespository(Class repository) {
-        return repositories.get(repository);
+    public static <T extends Repository> T getRepository(Class<T> repository) {
+        if(!repositories.containsKey(repository)) {
+            throw new RepositoryException(String.format("Repository '%s' could not be found. Please register this repository!", repository.getSimpleName()));
+        }
+        return (T) repositories.get(repository);
     }
 
     public static MessageHandler getHandler(Class requestClass) {
@@ -45,7 +49,7 @@ public class ZenChatServer {
     }
 
     private static void registerRequestHandlers() {
-        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler((UserRepository) getRespository(UserRepository.class)));
+        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler((UserRepository) getRepository(UserRepository.class)));
     }
 
     public static void loadContext() {

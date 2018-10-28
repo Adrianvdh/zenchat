@@ -9,7 +9,6 @@ import com.zenchat.server.api.registration.repository.UserRepository;
 import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.EmbeddedDatabaseBuilder;
 import com.zenchat.server.repository.HsqldbConnection;
-import com.zenchat.server.repository.Repository;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -39,7 +38,7 @@ public class RegistrationIntegrationTest {
         ZenChatServer.setDbConnection(connection);
         ZenChatServer.loadContext();
 
-        UserRepository userRepository = (UserRepository) ZenChatServer.getRespository(UserRepository.class);
+        UserRepository userRepository = ZenChatServer.getRepository(UserRepository.class);
         userRepository.deleteAll();
 
     }
