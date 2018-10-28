@@ -1,8 +1,10 @@
 package com.zenchat.server.api.registration.repository;
 
+import com.zenchat.server.repository.Repository;
+
 import java.util.List;
 
-public interface UserRepository {
+public interface UserRepository extends Repository {
 
     User save(User user);
 

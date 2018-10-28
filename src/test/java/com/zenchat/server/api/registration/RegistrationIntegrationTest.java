@@ -4,7 +4,8 @@ import com.zenchat.client.Client;
 import com.zenchat.common.messaging.Message;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.Server;
+import com.zenchat.server.ApplicationBootstrapper;
+import com.zenchat.server.listener.Server;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
@@ -24,6 +25,7 @@ public class RegistrationIntegrationTest {
     public void setUp() {
         server = new Server(PORT);
         server.start();
+        ApplicationBootstrapper.loadContext();
     }
 
     @After

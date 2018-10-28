@@ -1,7 +1,7 @@
 package com.zenchat;
 
 import com.zenchat.client.Client;
-import com.zenchat.server.Server;
+import com.zenchat.server.listener.Server;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

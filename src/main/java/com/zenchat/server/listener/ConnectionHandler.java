@@ -1,4 +1,4 @@
-package com.zenchat.server;
+package com.zenchat.server.listener;
 
 import com.zenchat.common.messaging.Message;
 

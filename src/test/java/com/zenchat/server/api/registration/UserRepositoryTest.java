@@ -14,8 +14,8 @@ import java.util.List;
 
 public class UserRepositoryTest {
 
-    Connection connection;
-    SqlUserRepository userRepository;
+    private Connection connection;
+    private SqlUserRepository userRepository;
 
     @Before
     public void setUp(){

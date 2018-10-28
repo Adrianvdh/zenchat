@@ -1,4 +1,4 @@
-package com.zenchat.server;
+package com.zenchat.server.listener;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,10 +26,6 @@ public class Server {
         this.port = port;
         connectionHandlerExecutorService = Executors.newCachedThreadPool();
         clientHandlerConnections = new ArrayList<>();
-    }
-
-    public static void main(String[] args) {
-        new Server(31145).start();
     }
 
     public void start() {

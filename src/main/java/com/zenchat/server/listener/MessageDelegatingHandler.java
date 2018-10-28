@@ -1,11 +1,10 @@
-package com.zenchat.server;
+package com.zenchat.server.listener;
 
 import com.zenchat.common.messaging.AckMessage;
 import com.zenchat.common.messaging.Headers;
 import com.zenchat.common.messaging.Message;
 import com.zenchat.common.messaging.protocol.Initialize;
-import com.zenchat.server.requesthandler.RequestHandlerRegister;
-import com.zenchat.server.requesthandler.RequestHandlerRegisterSingleton;
+import com.zenchat.server.ApplicationBootstrapper;
 import com.zenchat.server.requesthandler.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
@@ -17,8 +16,6 @@ import static com.zenchat.common.messaging.MessageHeadersProperties.SESSION_ID;
 
 @Slf4j
 public class MessageDelegatingHandler {
-
-    private RequestHandlerRegister messageHandlerRegister = RequestHandlerRegisterSingleton.getInstance().getHandlerRegister();
 
     private ObjectOutputStream out;
 
@@ -40,7 +37,7 @@ public class MessageDelegatingHandler {
                 reply(ackMessageMessage);
 
             } else {
-                RequestHandler handler = messageHandlerRegister.getHandler(payloadType);
+                RequestHandler handler = ApplicationBootstrapper.getHandler(payloadType);
                 Object response = handler.handle(message.getPayload());
 
                 Message responseMessage = new Message<>(UUID.randomUUID().toString(), response, message.getIdentifier(), new Headers());
