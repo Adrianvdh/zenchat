@@ -7,6 +7,9 @@ import com.zenchat.common.messaging.Message;
 import com.zenchat.common.messaging.protocol.Initialize;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
+import com.zenchat.server.requesthandler.MessageHandlerRegister;
+import com.zenchat.server.requesthandler.MessageHandlerRegisterSingleton;
+import com.zenchat.server.requesthandler.RequestHandler;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -17,6 +20,8 @@ import static com.zenchat.common.messaging.MessageHeadersProperties.SESSION_ID;
 
 @Slf4j
 public class MessageDelegatingHandler {
+
+    private MessageHandlerRegister messageHandlerRegister = MessageHandlerRegisterSingleton.getInstance().getHandlerRegister();
 
     private ObjectOutputStream out;
 
@@ -36,13 +41,14 @@ public class MessageDelegatingHandler {
                 Message<AckMessage> ackMessageMessage = new Message<>(UUID.randomUUID().toString(), ack, null, headers);
 
                 reply(ackMessageMessage);
-            } else if (payloadType == RegisterUserRequest.class) {
-                RegisterUserRequest registerUserRequest = (RegisterUserRequest) message.getPayload();
 
-                UserRegisterResponse userRegisterResponse = new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName(), true, null);
+            } else {
+                RequestHandler handler = messageHandlerRegister.getHandler(payloadType);
+                Object response = handler.handle(message.getPayload());
 
-                Message<UserRegisterResponse> responseMessage = new Message<>(UUID.randomUUID().toString(), userRegisterResponse, message.getIdentifier(), new Headers());
+                Message responseMessage = new Message<>(UUID.randomUUID().toString(), response, message.getIdentifier(), new Headers());
                 reply(responseMessage);
+
             }
         } catch (Throwable e) {
             try {

@@ -52,8 +52,4 @@ public class RegistrationTest {
         client.disconnect();
     }
 
-    @Test
-    public void testRegisterUser_userExists_exceptUserExistsException() {
-
-    }
 }
