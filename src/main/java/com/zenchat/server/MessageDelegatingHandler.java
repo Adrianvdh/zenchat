@@ -11,11 +11,11 @@ import java.util.UUID;
 
 import static com.zenchat.common.messaging.MessageHeadersProperties.SESSION_ID;
 
-public class MessageHandler {
+public class MessageDelegatingHandler {
 
     private ObjectOutputStream out;
 
-    public MessageHandler(ObjectOutputStream out) {
+    public MessageDelegatingHandler(ObjectOutputStream out) {
         this.out = out;
     }
 

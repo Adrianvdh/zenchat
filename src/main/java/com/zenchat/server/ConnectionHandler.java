@@ -14,7 +14,7 @@ public class ConnectionHandler {
     private ObjectOutputStream objectOutputStream = null;
     private ObjectInputStream objectInputStream = null;
 
-    private MessageHandler messageHandler;
+    private MessageDelegatingHandler messageHandler;
 
     public ConnectionHandler(Socket clientSocket) {
         this.socket = clientSocket;
@@ -32,7 +32,7 @@ public class ConnectionHandler {
     }
 
     public void handle() {
-        this.messageHandler = new MessageHandler(objectOutputStream);
+        this.messageHandler = new MessageDelegatingHandler(objectOutputStream);
 
         while (!Thread.currentThread().isInterrupted()) {
             try {
