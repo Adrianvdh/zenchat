@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane fx:controller="com.chatapp.gui.chat.ChatController" prefHeight="484.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <ListView fx:id="connectedUsersListView" editable="true" layoutX="14.0" layoutY="14.0" prefHeight="405.0" prefWidth="175.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <TextArea fx:id="userChatHistoryTextArea" layoutX="203.0" layoutY="14.0" prefHeight="355.0" prefWidth="540.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0" />
+      <TextField fx:id="messageTextField" layoutX="203.0" layoutY="380.0" prefHeight="39.0" prefWidth="426.0" promptText="Enter your message" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="127.0" />
+      <Button fx:id="sendButton" layoutX="645.0" layoutY="380.0" mnemonicParsing="false" onAction="#onSendButton" prefHeight="39.0" prefWidth="98.0" text="Send" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="13.0" />
+   </children>
+</AnchorPane>

@@ -18,10 +18,13 @@ import java.util.Map;
 
 @Slf4j
 public class ZenChatServer {
-
+    private SocketServer server;
     private static Connection dbConnection;
     private static Map<Class, Repository> repositories = new HashMap<>();
     private static Map<Class, MessageHandler> handlers = new HashMap<>();
+
+    public ZenChatServer() {
+    }
 
     public static <T extends Repository> T getRepository(Class<T> repository) {
         if(!repositories.containsKey(repository)) {
@@ -40,8 +43,12 @@ public class ZenChatServer {
         return handlers.get(requestClass);
     }
 
-    public static void setDbConnection(Connection connection) {
+    private static void setDbConnection(Connection connection) {
         dbConnection = connection;
+    }
+
+    protected Connection getDbConnection() {
+        return HsqldbConnection.getInstance().getRemoteConnection();
     }
 
     private static void registerRepositories() {
@@ -49,20 +56,41 @@ public class ZenChatServer {
     }
 
     private static void registerRequestHandlers() {
-        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler((UserRepository) getRepository(UserRepository.class)));
+        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler(getRepository(UserRepository.class)));
     }
 
-    public static void loadContext() {
+    public void startup() {
+        log.info("ZenChat server is starting up...");
+
+        Connection dbConnection = getDbConnection();
+        if(dbConnection == null) {
+            log.error("Cannot connect to SQL server...");
+            System.exit(1);
+            return;
+        }
+
+        setDbConnection(dbConnection);
+
         registerRepositories();
         registerRequestHandlers();
+
+        server = new SocketServer(34567);
+        server.start();
+
+        log.info("ZenChat server has started!");
+    }
+
+    public void shutdown() {
+        log.info("ZenChat server is shutting down...");
+
+        server.stop();
     }
 
     public static void main(String[] args) {
-        setDbConnection(HsqldbConnection.getInstance().getRemoteConnection());
-        loadContext();
+        ZenChatServer zenChatServer = new ZenChatServer();
+        Runtime.getRuntime().addShutdownHook(new Thread(zenChatServer::shutdown));
 
-        SocketServer server = new SocketServer(31145);
-        server.start();
+        zenChatServer.startup();
     }
 
 }

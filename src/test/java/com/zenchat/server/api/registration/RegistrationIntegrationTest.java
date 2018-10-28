@@ -4,48 +4,33 @@ import com.zenchat.client.Client;
 import com.zenchat.common.message.Message;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.ZenChatServer;
+import com.zenchat.server.ZenChatTestServer;
 import com.zenchat.server.api.registration.repository.UserRepository;
-import com.zenchat.server.network.SocketServer;
-import com.zenchat.server.repository.EmbeddedDatabaseBuilder;
-import com.zenchat.server.repository.HsqldbConnection;
 import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.sql.Connection;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
 public class RegistrationIntegrationTest {
 
+    private ZenChatTestServer server = new ZenChatTestServer();
     private static String HOST = "localhost";
     private static int PORT = 34567;
 
-    private SocketServer server;
-
     @Before
     public void setUp() {
-        server = new SocketServer(PORT);
-        server.start();
+        server.startup();
 
-        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
-        builder.configureConnection(HsqldbConnection.getInstance().getInprocessConnection());
-        builder.addUpdateScript("hsqldb/create-schema.sql");
-        Connection connection = builder.build();
-
-        ZenChatServer.setDbConnection(connection);
-        ZenChatServer.loadContext();
-
-        UserRepository userRepository = ZenChatServer.getRepository(UserRepository.class);
+        UserRepository userRepository = ZenChatTestServer.getRepository(UserRepository.class);
         userRepository.deleteAll();
-
     }
 
     @After
     public void tearDown() {
-        server.stop();
+        server.shutdown();
     }
 
     @Test

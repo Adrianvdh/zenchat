@@ -25,7 +25,7 @@ public class HsqldbConnection {
     public Connection getInprocessConnection() {
         if (inprocessConnection == null) {
             try {
-                inprocessConnection = DriverManager.getConnection("jdbc:hsqldb:mem:korichatdb", "SA", "");
+                inprocessConnection = DriverManager.getConnection("jdbc:hsqldb:mem:zenchatdb", "SA", "");
             } catch (SQLException e) {
                 e.printStackTrace();
             }
