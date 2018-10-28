@@ -16,7 +16,7 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
 
     @Override
     public UserRegisterResponse handle(RegisterUserRequest registerUserRequest) {
-//        userRepository.save(new User(registerUserRequest.getUsername()));
+        userRepository.save(new User(registerUserRequest.getUsername()));
 
         return new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName(), true, null);
     }

@@ -11,12 +11,14 @@ import com.zenchat.server.message.MessageHandler;
 import com.zenchat.server.message.MessageHandlerException;
 import lombok.extern.slf4j.Slf4j;
 
+import java.sql.Connection;
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
 public class ZenChatServer {
 
+    private static Connection dbConnection;
     private static Map<Class, Repository> repositories = new HashMap<>();
     private static Map<Class, MessageHandler> handlers = new HashMap<>();
 
@@ -34,8 +36,12 @@ public class ZenChatServer {
         return handlers.get(requestClass);
     }
 
+    public static void setDbConnection(Connection connection) {
+        dbConnection = connection;
+    }
+
     private static void registerRepositories() {
-        repositories.put(UserRepository.class, new SqlUserRepository(HsqldbConnection.getInstance().getInprocessConnection()));
+        repositories.put(UserRepository.class, new SqlUserRepository(dbConnection));
     }
 
     private static void registerRequestHandlers() {
@@ -48,6 +54,7 @@ public class ZenChatServer {
     }
 
     public static void main(String[] args) {
+        setDbConnection(HsqldbConnection.getInstance().getRemoteConnection());
         loadContext();
 
         SocketServer server = new SocketServer(31145);
