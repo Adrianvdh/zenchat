@@ -1,5 +1,6 @@
 package com.zenchat.server.network;
 
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,6 +12,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
+@Slf4j
 public class SocketServer {
     private Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
@@ -29,13 +31,12 @@ public class SocketServer {
     }
 
     public void start() {
-        logger.info("Starting server...");
         serverThread = new Thread(() -> {
             if (!tryBindServerSocket()) {
                 return;
             }
             if(!Thread.currentThread().isInterrupted()) {
-                logger.info("Server is listening on port {}", port);
+                logger.info("Awaiting connections on port {}", port);
             }
             notifyServerStarted();
             while (!Thread.currentThread().isInterrupted()) {

@@ -4,6 +4,7 @@ import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.server.api.registration.UserRegistrationHandler;
 import com.zenchat.server.api.registration.repository.SqlUserRepository;
 import com.zenchat.server.api.registration.repository.UserRepository;
+import com.zenchat.server.config.ServerConfiguration;
 import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.HsqldbConnection;
 import com.zenchat.server.repository.Repository;
@@ -18,12 +19,15 @@ import java.util.Map;
 
 @Slf4j
 public class ZenChatServer {
+    private ServerConfiguration configuration;
+
     private SocketServer server;
     private static Connection dbConnection;
     private static Map<Class, Repository> repositories = new HashMap<>();
     private static Map<Class, MessageHandler> handlers = new HashMap<>();
 
-    public ZenChatServer() {
+    public ZenChatServer(ServerConfiguration configuration) {
+        this.configuration = configuration;
     }
 
     public static <T extends Repository> T getRepository(Class<T> repository) {
@@ -48,7 +52,7 @@ public class ZenChatServer {
     }
 
     protected Connection getDbConnection() {
-        return HsqldbConnection.getInstance().getRemoteConnection();
+        return HsqldbConnection.getInstance().getInprocessConnection();
     }
 
     private static void registerRepositories() {
@@ -74,10 +78,8 @@ public class ZenChatServer {
         registerRepositories();
         registerRequestHandlers();
 
-        server = new SocketServer(34567);
+        server = new SocketServer(configuration.getPort());
         server.start();
-
-        log.info("ZenChat server has started!");
     }
 
     public void shutdown() {
@@ -87,7 +89,9 @@ public class ZenChatServer {
     }
 
     public static void main(String[] args) {
-        ZenChatServer zenChatServer = new ZenChatServer();
+        ServerConfiguration serverConfiguration = ServerConfiguration.fromProperties("application.properties");
+        ZenChatServer zenChatServer = new ZenChatServer(serverConfiguration);
+
         Runtime.getRuntime().addShutdownHook(new Thread(zenChatServer::shutdown));
 
         zenChatServer.startup();
