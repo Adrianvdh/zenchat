@@ -1,4 +1,4 @@
-package com.zenchat.common.messaging.protocol;
+package com.zenchat.common.message.protocol;
 
 import lombok.Data;
 

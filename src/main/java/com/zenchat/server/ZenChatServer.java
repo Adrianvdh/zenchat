@@ -7,8 +7,8 @@ import com.zenchat.server.api.registration.repository.UserRepository;
 import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.HsqldbConnection;
 import com.zenchat.server.repository.Repository;
-import com.zenchat.server.message.RequestHandler;
-import com.zenchat.server.message.RequestHandlerException;
+import com.zenchat.server.message.MessageHandler;
+import com.zenchat.server.message.MessageHandlerException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
@@ -18,18 +18,18 @@ import java.util.Map;
 public class ZenChatServer {
 
     private static Map<Class, Repository> repositories = new HashMap<>();
-    private static Map<Class, RequestHandler> handlers = new HashMap<>();
+    private static Map<Class, MessageHandler> handlers = new HashMap<>();
 
     public static Repository getRespository(Class repository) {
         return repositories.get(repository);
     }
 
-    public static RequestHandler getHandler(Class requestClass) {
+    public static MessageHandler getHandler(Class requestClass) {
         if(requestClass == null || !handlers.containsKey(requestClass)) {
             String message = String.format("Request requestClass could not be found for request '%s'", requestClass == null ? "Null" : requestClass.getSimpleName());
             log.error(message);
 
-            throw new RequestHandlerException(message);
+            throw new MessageHandlerException(message);
         }
         return handlers.get(requestClass);
     }

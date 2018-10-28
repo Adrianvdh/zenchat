@@ -1,17 +1,15 @@
 package com.zenchat.server.message;
 
-import com.zenchat.common.messaging.AckMessage;
-import com.zenchat.common.messaging.Headers;
-import com.zenchat.common.messaging.Message;
-import com.zenchat.common.messaging.protocol.Initialize;
+import com.zenchat.common.message.Headers;
+import com.zenchat.common.message.Message;
 import com.zenchat.server.ZenChatServer;
+import com.zenchat.server.message.protocol.ProtocolMessageHandler;
+import com.zenchat.server.message.protocol.ProtocolMessages;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.util.UUID;
-
-import static com.zenchat.common.messaging.HeadersProperties.SESSION_ID;
 
 @Slf4j
 public class MessageDelegatingHandler {
@@ -25,18 +23,15 @@ public class MessageDelegatingHandler {
     public void handle(Message message) {
         Class payloadType = message.getPayloadType();
         try {
-            if (payloadType == Initialize.class) {
-                AckMessage ack = new AckMessage(message.getIdentifier());
 
-                Headers headers = new Headers();
-                headers.addHeader(SESSION_ID, UUID.randomUUID().toString());
+            if (ProtocolMessages.isProtocolMessage(payloadType)) {
+                ProtocolMessageHandler handler = ProtocolMessages.getHandler(payloadType);
+                Message responseMessage = handler.handle(message);
 
-                Message<AckMessage> ackMessageMessage = new Message<>(UUID.randomUUID().toString(), ack, null, headers);
-
-                reply(ackMessageMessage);
+                reply(responseMessage);
 
             } else {
-                RequestHandler handler = ZenChatServer.getHandler(payloadType);
+                MessageHandler handler = ZenChatServer.getHandler(payloadType);
                 Object response = handler.handle(message.getPayload());
 
                 Message responseMessage = new Message<>(UUID.randomUUID().toString(), response, message.getIdentifier(), new Headers());

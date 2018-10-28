@@ -1,7 +1,6 @@
-package com.zenchat;
+package com.zenchat.server.network;
 
 import com.zenchat.client.Client;
-import com.zenchat.server.network.SocketServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;

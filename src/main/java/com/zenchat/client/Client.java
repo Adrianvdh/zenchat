@@ -1,8 +1,8 @@
 package com.zenchat.client;
 
-import com.zenchat.common.messaging.AckMessage;
-import com.zenchat.common.messaging.Message;
-import com.zenchat.common.messaging.protocol.Initialize;
+import com.zenchat.common.message.AckMessage;
+import com.zenchat.common.message.Message;
+import com.zenchat.common.message.protocol.Initialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.concurrent.*;
 import java.util.function.Consumer;
 
-import static com.zenchat.common.messaging.HeadersProperties.SESSION_ID;
+import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
 
 public class Client {
     private Logger logger = LoggerFactory.getLogger(Client.class);

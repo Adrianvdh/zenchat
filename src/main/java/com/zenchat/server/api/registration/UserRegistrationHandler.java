@@ -2,9 +2,9 @@ package com.zenchat.server.api.registration;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.message.RequestHandler;
+import com.zenchat.server.message.MessageHandler;
 
-public class UserRegistrationHandler implements RequestHandler<UserRegisterResponse, RegisterUserRequest> {
+public class UserRegistrationHandler implements MessageHandler<UserRegisterResponse, RegisterUserRequest> {
 
     @Override
     public UserRegisterResponse handle(RegisterUserRequest registerUserRequest) {
