@@ -2,6 +2,7 @@ package com.zenchat.server.api.registration;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
+import com.zenchat.server.api.registration.repository.User;
 import com.zenchat.server.api.registration.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;
 
@@ -15,6 +16,8 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
 
     @Override
     public UserRegisterResponse handle(RegisterUserRequest registerUserRequest) {
+//        userRepository.save(new User(registerUserRequest.getUsername()));
+
         return new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName(), true, null);
     }
 }

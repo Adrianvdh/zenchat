@@ -54,21 +54,18 @@ public class Client {
             trySetupInAndOutStreams();
 
             Message<Initialize> initializeMessage = new Message<>(new Initialize());
-            apply(initializeMessage);
+            Future<Message<AckMessage>> ackMessageFuture = send(initializeMessage, throwable -> {
+                throw new RuntimeException(throwable);
+            });
             unAcknowledgedMessageIds.add(initializeMessage.getIdentifier());
 
-            Message<?> message = null;
+            Message<AckMessage> ackMessage = null;
             try {
-                message = waitForServerResponse();
-            } catch (IOException e) {
-                logger.error("Failed to get response from server!", e);
-            }
-            if(Throwable.class.isAssignableFrom(message.getPayloadType())) {
-                Throwable throwable = (Throwable) message.getPayload();
-                throw new RuntimeException(throwable);
+                ackMessage = ackMessageFuture.get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
             }
 
-            Message<AckMessage> ackMessage = (Message<AckMessage>) message;
             String initializeMessageId = unAcknowledgedMessageIds.get(0);
             String ackId = ackMessage.getPayload().getIdentifier();
 
@@ -77,10 +74,10 @@ public class Client {
             }
             unAcknowledgedMessageIds.remove(ackId);
 
-            if(!message.getHeaders().containsHeader(SESSION_ID)) {
+            if(!ackMessage.getHeaders().containsHeader(SESSION_ID)) {
                 throw new ClientException("Server didn't respond with a sessionId");
             }
-            this.sessionId = message.getHeaders().get(SESSION_ID);
+            this.sessionId = ackMessage.getHeaders().get(SESSION_ID);
 
             logger.info("Client connected.");
         } else {
@@ -88,7 +85,7 @@ public class Client {
         }
     }
 
-    public <T, R> Future<Message<R>> send(Message<T> message) {
+    public <T, R> Future<Message<R>> send(Message<T> message, ErrorCallback errorCallback) {
         apply(message);
         unAcknowledgedMessageIds.add(message.getIdentifier());
 
@@ -98,6 +95,12 @@ public class Client {
                 response = waitForServerResponse();
             } catch (IOException e) {
                 logger.error("An I/O error occurred between the client and server!", e);
+            }
+
+            if(Throwable.class.isAssignableFrom(response.getPayloadType())) {
+                Throwable throwable = (Throwable) response.getPayload();
+                errorCallback.onError(throwable);
+                return null;
             }
 
             unAcknowledgedMessageIds.remove(response.getCorrelationId());

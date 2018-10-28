@@ -1,5 +1,6 @@
 package com.zenchat.server.api.registration.repository;
 
+import com.zenchat.server.repository.RepositoryException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -35,7 +36,8 @@ public class SqlUserRepository implements UserRepository {
                 return new User(userId, user.getUsername());
             }
         } catch (SQLException e) {
-            logger.error("SQLException occurred", e);
+            logger.error("Error saving User", e);
+            throw new RepositoryException("Error saving User!");
         }
         return null;
     }

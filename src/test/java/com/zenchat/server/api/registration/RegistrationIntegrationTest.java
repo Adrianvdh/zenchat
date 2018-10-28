@@ -1,6 +1,7 @@
 package com.zenchat.server.api.registration;
 
 import com.zenchat.client.Client;
+import com.zenchat.client.ErrorCallback;
 import com.zenchat.common.message.Message;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
@@ -41,7 +42,9 @@ public class RegistrationIntegrationTest {
         Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest("username", "Test1234", "Test User"));
         String requestId = requestMessage.getIdentifier();
 
-        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage);
+        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
+            Assert.fail(t.getMessage());
+        });
 
         Message<UserRegisterResponse> responseMessage = responseMessageFuture.get();
         UserRegisterResponse userRegisterResponse = responseMessage.getPayload();

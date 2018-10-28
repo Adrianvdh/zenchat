@@ -5,6 +5,8 @@ import com.zenchat.common.message.Message;
 import com.zenchat.server.ZenChatServer;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
+import com.zenchat.server.repository.Repository;
+import com.zenchat.server.repository.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -39,6 +41,7 @@ public class MessageDelegatingHandler {
 
             }
         } catch (Throwable e) {
+            log.error("An exception occurred", e);
             try {
                 replyThrowable(new Message<>(e, message.getIdentifier()));
             } catch (IOException ioe) {
