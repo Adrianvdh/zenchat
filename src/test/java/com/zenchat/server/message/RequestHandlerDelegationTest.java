@@ -4,14 +4,19 @@ import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.ZenChatServer;
 import com.zenchat.server.api.registration.UserRegistrationHandler;
+import com.zenchat.server.api.registration.repository.UserRepository;
 import org.junit.Assert;
 import org.junit.Test;
+import org.mockito.Mockito;
 
 public class RequestHandlerDelegationTest {
 
     @Test
     public void testHandleMessageDelegation() {
-        UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(null);
+        UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
+        Mockito.when(mockUserRepository.exists("username")).thenReturn(false);
+
+        UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(mockUserRepository);
 
         UserRegisterResponse expectedResponse = new UserRegisterResponse("username", "name", true, null);
         UserRegisterResponse response = userRegistrationHandler.handle(new RegisterUserRequest("username", "password", "name"));

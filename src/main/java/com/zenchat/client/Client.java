@@ -6,16 +6,15 @@ import com.zenchat.common.message.protocol.Initialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.EOFException;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
+import java.io.*;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.*;
+import java.util.function.BiFunction;
 import java.util.function.Consumer;
+import java.util.function.Supplier;
 
 import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
 
@@ -87,25 +86,57 @@ public class Client {
 
     public <T, R> Future<Message<R>> send(Message<T> message, ErrorCallback errorCallback) {
         apply(message);
+
         unAcknowledgedMessageIds.add(message.getIdentifier());
 
-        return executorService.submit(() -> {
-            Message response = null;
-            try {
-                response = waitForServerResponse();
-            } catch (IOException e) {
-                logger.error("An I/O error occurred between the client and server!", e);
-            }
+        return CompletableFuture
+                .supplyAsync(() -> {
 
-            if(Throwable.class.isAssignableFrom(response.getPayloadType())) {
-                Throwable throwable = (Throwable) response.getPayload();
-                errorCallback.onError(throwable);
+                    Message<R> responseMessage;
+                    try {
+                        responseMessage = waitForServerResponse();
+                    } catch (IOException e) {
+                        throw new RuntimeException("An I/O error occurred between the client and server!", e);
+                    }
+
+                    unAcknowledgedMessageIds.remove(responseMessage.getCorrelationId());
+
+                    if(Throwable.class.isAssignableFrom(responseMessage.getPayloadType())) {
+                        throw new RuntimeException((Throwable) responseMessage.getPayload());
+                    }
+
+                    return responseMessage;
+                }, executorService)
+                .handle((tMessage, throwable) -> {
+                    if(throwable != null) {
+                        errorCallback.onError(throwable.getCause());
+                    }
+
+                    return tMessage;
+                });
+    }
+
+    public static void main(String[] args) {
+
+        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
+            throw new RuntimeException("erorr");
+        }).handle(new BiFunction<Object, Throwable, String>() {
+            @Override
+            public String apply(Object o, Throwable throwable) {
                 return null;
             }
-
-            unAcknowledgedMessageIds.remove(response.getCorrelationId());
-            return response;
         });
+
+        try {
+            String s = completableFuture.get();
+            System.out.println("s = " + s);
+
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        } catch (ExecutionException e) {
+            e.printStackTrace();
+        }
+
 
     }
 
