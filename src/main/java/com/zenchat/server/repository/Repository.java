@@ -1,4 +1,12 @@
 package com.zenchat.server.repository;
 
-public interface Repository {
+import java.util.List;
+
+public interface Repository<T> {
+    T save(T user);
+
+    List<T> findAll();
+
+    void deleteAll();
+
 }

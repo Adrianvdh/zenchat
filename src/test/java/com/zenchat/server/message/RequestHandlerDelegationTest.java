@@ -11,7 +11,7 @@ public class RequestHandlerDelegationTest {
 
     @Test
     public void testHandleMessageDelegation() {
-        UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler();
+        UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(null);
 
         UserRegisterResponse expectedResponse = new UserRegisterResponse("username", "name", true, null);
         UserRegisterResponse response = userRegistrationHandler.handle(new RegisterUserRequest("username", "password", "name"));

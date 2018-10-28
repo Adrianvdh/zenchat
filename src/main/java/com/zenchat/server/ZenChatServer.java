@@ -39,7 +39,7 @@ public class ZenChatServer {
     }
 
     private static void registerRequestHandlers() {
-        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler());
+        handlers.put(RegisterUserRequest.class, new UserRegistrationHandler((UserRepository) getRespository(UserRepository.class)));
     }
 
     public static void loadContext() {
