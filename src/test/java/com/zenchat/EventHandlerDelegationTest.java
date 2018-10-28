@@ -2,6 +2,7 @@ package com.zenchat;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
+import com.zenchat.server.api.registration.UserRegistrationHandler;
 import com.zenchat.server.requesthandler.*;
 import org.junit.Assert;
 import org.junit.Test;

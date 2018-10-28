@@ -1,6 +1,7 @@
 package com.zenchat.server.requesthandler;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
+import com.zenchat.server.api.registration.UserRegistrationHandler;
 
 import java.util.HashMap;
 import java.util.Map;
