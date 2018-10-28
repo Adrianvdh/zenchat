@@ -1,6 +1,7 @@
-package com.zenchat.server.listener;
+package com.zenchat.server.network;
 
 import com.zenchat.common.messaging.Message;
+import com.zenchat.server.message.MessageDelegatingHandler;
 
 import java.io.EOFException;
 import java.io.IOException;

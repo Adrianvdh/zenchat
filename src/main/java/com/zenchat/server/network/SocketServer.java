@@ -1,4 +1,4 @@
-package com.zenchat.server.listener;
+package com.zenchat.server.network;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +11,8 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-public class Server {
-    private Logger logger = LoggerFactory.getLogger(Server.class);
+public class SocketServer {
+    private Logger logger = LoggerFactory.getLogger(SocketServer.class);
 
     private ServerSocket serverSocket;
     private Thread serverThread;
@@ -22,7 +22,7 @@ public class Server {
     private volatile boolean serverStarted = false;
     private int port;
 
-    public Server(int port) {
+    public SocketServer(int port) {
         this.port = port;
         connectionHandlerExecutorService = Executors.newCachedThreadPool();
         clientHandlerConnections = new ArrayList<>();

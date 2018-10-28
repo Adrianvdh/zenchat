@@ -4,18 +4,18 @@ import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.server.api.registration.UserRegistrationHandler;
 import com.zenchat.server.api.registration.repository.SqlUserRepository;
 import com.zenchat.server.api.registration.repository.UserRepository;
-import com.zenchat.server.listener.Server;
+import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.HsqldbConnection;
 import com.zenchat.server.repository.Repository;
-import com.zenchat.server.requesthandler.RequestHandler;
-import com.zenchat.server.requesthandler.RequestHandlerException;
+import com.zenchat.server.message.RequestHandler;
+import com.zenchat.server.message.RequestHandlerException;
 import lombok.extern.slf4j.Slf4j;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @Slf4j
-public class ApplicationBootstrapper {
+public class ZenChatServer {
 
     private static Map<Class, Repository> repositories = new HashMap<>();
     private static Map<Class, RequestHandler> handlers = new HashMap<>();
@@ -50,7 +50,7 @@ public class ApplicationBootstrapper {
     public static void main(String[] args) {
         loadContext();
 
-        Server server = new Server(31145);
+        SocketServer server = new SocketServer(31145);
         server.start();
     }
 

@@ -1,4 +1,4 @@
-package com.zenchat.server.requesthandler;
+package com.zenchat.server.message;
 
 public class RequestHandlerException extends RuntimeException {
     public RequestHandlerException(String message) {

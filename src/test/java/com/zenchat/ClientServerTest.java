@@ -1,7 +1,7 @@
 package com.zenchat;
 
 import com.zenchat.client.Client;
-import com.zenchat.server.listener.Server;
+import com.zenchat.server.network.SocketServer;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -11,11 +11,11 @@ public class ClientServerTest {
     private static String HOST = "localhost";
     private static int PORT = 34567;
 
-    private Server server;
+    private SocketServer server;
 
     @Before
     public void setUp() {
-        server = new Server(PORT);
+        server = new SocketServer(PORT);
         server.start();
     }
 

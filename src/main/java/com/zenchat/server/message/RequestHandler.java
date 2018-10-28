@@ -1,4 +1,4 @@
-package com.zenchat.server.requesthandler;
+package com.zenchat.server.message;
 
 import com.zenchat.common.messaging.Message;
 
