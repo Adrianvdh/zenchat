@@ -6,7 +6,7 @@
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane fx:controller="com.chatapp.gui.chat.ChatController" prefHeight="484.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane fx:controller="com.zenchat.ui.chat.ChatController" prefHeight="484.0" prefWidth="802.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <ListView fx:id="connectedUsersListView" editable="true" layoutX="14.0" layoutY="14.0" prefHeight="405.0" prefWidth="175.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
       <TextArea fx:id="userChatHistoryTextArea" layoutX="203.0" layoutY="14.0" prefHeight="355.0" prefWidth="540.0" AnchorPane.bottomAnchor="64.0" AnchorPane.leftAnchor="203.0" AnchorPane.rightAnchor="13.0" AnchorPane.topAnchor="14.0" />

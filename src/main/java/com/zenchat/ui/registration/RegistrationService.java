@@ -20,7 +20,8 @@ public class RegistrationService {
         Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(username, password, null));
 
         Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, throwable -> {
-
+            System.out.println("Error occurred" + throwable.getMessage());
+            return;
         });
 
         Message<UserRegisterResponse> responseMessage = null;
@@ -32,6 +33,7 @@ public class RegistrationService {
             e.printStackTrace();
         }
         UserRegisterResponse userRegisterResponse = responseMessage.getPayload();
+        System.out.println("registered " + userRegisterResponse.getUsername());
 
     }
 }

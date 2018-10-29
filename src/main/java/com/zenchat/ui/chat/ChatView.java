@@ -12,6 +12,6 @@ public class ChatView extends FxView<ChatController> {
 
     @Override
     protected URL viewResource() {
-        return getClass().getResource("/chat_view.fxml");
+        return getClass().getResource("/views/chat_view.fxml");
     }
 }

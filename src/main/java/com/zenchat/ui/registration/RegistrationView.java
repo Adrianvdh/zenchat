@@ -12,6 +12,6 @@ public class RegistrationView extends FxView<RegistrationController> {
 
     @Override
     protected URL viewResource() {
-        return getClass().getResource("/registration_view.fxml");
+        return getClass().getResource("/views/registration_view.fxml");
     }
 }

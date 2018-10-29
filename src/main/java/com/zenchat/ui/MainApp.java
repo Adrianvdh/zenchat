@@ -13,7 +13,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        Client client = new Client("localhost", 3324);
+        Client client = new Client("localhost", 33120);
         client.connect();
 
         ChatComponent chatModule = new ChatComponent(client);
@@ -22,6 +22,6 @@ public class MainApp extends Application {
 
     @Override
     public void stop() throws Exception {
-        System.exit(0);
+//        System.exit(0);
     }
 }

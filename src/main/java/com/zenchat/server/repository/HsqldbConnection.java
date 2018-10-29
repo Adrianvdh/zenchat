@@ -27,7 +27,7 @@ public class HsqldbConnection {
             try {
                 inprocessConnection = DriverManager.getConnection("jdbc:hsqldb:mem:zenchatdb", "SA", "");
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException("Failed to setup connection with database!", e);
             }
         }
         return inprocessConnection;
@@ -38,7 +38,7 @@ public class HsqldbConnection {
             try {
                 remoteConnection = DriverManager.getConnection("jdbc:hsqldb:hsql://localhost/xdb", "SA", "");
             } catch (SQLException e) {
-                e.printStackTrace();
+                throw new RuntimeException("Failed to setup connection with database!", e);
             }
         }
         return remoteConnection;

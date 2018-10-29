@@ -5,11 +5,12 @@ import com.zenchat.server.api.registration.UserRegistrationHandler;
 import com.zenchat.server.api.registration.repository.SqlUserRepository;
 import com.zenchat.server.api.registration.repository.UserRepository;
 import com.zenchat.server.config.ServerConfiguration;
-import com.zenchat.server.network.SocketServer;
-import com.zenchat.server.repository.HsqldbConnection;
-import com.zenchat.server.repository.Repository;
 import com.zenchat.server.message.MessageHandler;
 import com.zenchat.server.message.MessageHandlerException;
+import com.zenchat.server.network.SocketServer;
+import com.zenchat.server.repository.EmbeddedDatabaseBuilder;
+import com.zenchat.server.repository.HsqldbConnection;
+import com.zenchat.server.repository.Repository;
 import com.zenchat.server.repository.RepositoryException;
 import lombok.extern.slf4j.Slf4j;
 
@@ -31,14 +32,14 @@ public class ZenChatServer {
     }
 
     public static <T extends Repository> T getRepository(Class<T> repository) {
-        if(!repositories.containsKey(repository)) {
+        if (!repositories.containsKey(repository)) {
             throw new RepositoryException(String.format("Repository '%s' could not be found. Please register this repository!", repository.getSimpleName()));
         }
         return (T) repositories.get(repository);
     }
 
     public static MessageHandler getHandler(Class requestClass) {
-        if(requestClass == null || !handlers.containsKey(requestClass)) {
+        if (requestClass == null || !handlers.containsKey(requestClass)) {
             String message = String.format("Request requestClass could not be found for request '%s'", requestClass == null ? "Null" : requestClass.getSimpleName());
             log.error(message);
 
@@ -52,7 +53,11 @@ public class ZenChatServer {
     }
 
     protected Connection getDbConnection() {
-        return HsqldbConnection.getInstance().getInprocessConnection();
+        EmbeddedDatabaseBuilder builder = new EmbeddedDatabaseBuilder();
+        builder.configureConnection(HsqldbConnection.getInstance().getInprocessConnection());
+        builder.addUpdateScript("hsqldb/create-schema.sql");
+
+        return builder.build();
     }
 
     private static void registerRepositories() {
@@ -67,7 +72,7 @@ public class ZenChatServer {
         log.info("ZenChat server is starting up...");
 
         Connection dbConnection = getDbConnection();
-        if(dbConnection == null) {
+        if (dbConnection == null) {
             log.error("Cannot connect to SQL server...");
             System.exit(1);
             return;
@@ -85,7 +90,9 @@ public class ZenChatServer {
     public void shutdown() {
         log.info("ZenChat server is shutting down...");
 
-        server.stop();
+        if (server != null) {
+            server.stop();
+        }
     }
 
     public static void main(String[] args) {
