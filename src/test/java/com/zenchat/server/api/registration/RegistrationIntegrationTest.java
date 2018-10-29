@@ -44,7 +44,6 @@ public class RegistrationIntegrationTest {
         client.connect();
 
         Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest("username", "Test1234", "Test User"));
-        String requestId = requestMessage.getIdentifier();
 
         Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
             Assert.fail(t.getMessage());
@@ -53,10 +52,11 @@ public class RegistrationIntegrationTest {
         Message<UserRegisterResponse> responseMessage = responseMessageFuture.get();
         UserRegisterResponse userRegisterResponse = responseMessage.getPayload();
 
+        String requestId = requestMessage.getIdentifier();
         String correlationId = responseMessage.getCorrelationId();
-
-        Assert.assertTrue(userRegisterResponse.isSuccess());
         Assert.assertEquals(requestId, correlationId);
+
+        Assert.assertEquals("username", userRegisterResponse.getUsername());
 
         client.disconnect();
     }

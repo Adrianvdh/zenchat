@@ -1,6 +1,8 @@
 package com.zenchat.server;
 
+import com.zenchat.model.api.login.LoginUserRequest;
 import com.zenchat.model.api.registration.RegisterUserRequest;
+import com.zenchat.server.api.login.UserLoginHandler;
 import com.zenchat.server.api.registration.UserRegistrationHandler;
 import com.zenchat.server.api.registration.repository.SqlUserRepository;
 import com.zenchat.server.api.registration.repository.UserRepository;
@@ -40,7 +42,7 @@ public class ZenChatServer {
 
     public static MessageHandler getHandler(Class requestClass) {
         if (requestClass == null || !handlers.containsKey(requestClass)) {
-            String message = String.format("Request requestClass could not be found for request '%s'", requestClass == null ? "Null" : requestClass.getSimpleName());
+            String message = String.format("Message handler could not be found for request '%s'", requestClass == null ? "Null" : requestClass.getSimpleName());
             log.error(message);
 
             throw new MessageHandlerException(message);
@@ -66,6 +68,7 @@ public class ZenChatServer {
 
     private static void registerRequestHandlers() {
         handlers.put(RegisterUserRequest.class, new UserRegistrationHandler(getRepository(UserRepository.class)));
+        handlers.put(LoginUserRequest.class, new UserLoginHandler(getRepository(UserRepository.class)));
     }
 
     public void startup() {

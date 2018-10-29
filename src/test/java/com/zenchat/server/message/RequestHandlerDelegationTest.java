@@ -18,7 +18,7 @@ public class RequestHandlerDelegationTest {
 
         UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(mockUserRepository);
 
-        UserRegisterResponse expectedResponse = new UserRegisterResponse("username", "name", true, null);
+        UserRegisterResponse expectedResponse = new UserRegisterResponse("username", "name");
         UserRegisterResponse response = userRegistrationHandler.handle(new RegisterUserRequest("username", "password", "name"));
 
         Assert.assertEquals(expectedResponse, response);

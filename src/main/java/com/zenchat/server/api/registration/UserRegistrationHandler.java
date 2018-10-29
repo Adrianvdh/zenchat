@@ -21,6 +21,6 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
         }
         userRepository.save(new User(registerUserRequest.getUsername()));
 
-        return new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName(), true, null);
+        return new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName());
     }
 }

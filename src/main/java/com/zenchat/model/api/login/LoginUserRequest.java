@@ -1,4 +1,4 @@
-package com.zenchat.model.api.registration;
+package com.zenchat.model.api.login;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -7,7 +7,7 @@ import java.io.Serializable;
 
 @Data
 @AllArgsConstructor
-public class UserRegisterResponse implements Serializable {
+public class LoginUserRequest implements Serializable {
     private String username;
-    private String name;
+    private String password;
 }
