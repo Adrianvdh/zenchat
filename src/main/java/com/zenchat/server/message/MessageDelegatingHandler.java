@@ -2,7 +2,7 @@ package com.zenchat.server.message;
 
 import com.zenchat.common.message.Headers;
 import com.zenchat.common.message.Message;
-import com.zenchat.server.ZenChatServer;
+import com.zenchat.server.config.MessageHandlers;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
 import lombok.extern.slf4j.Slf4j;
@@ -31,7 +31,7 @@ public class MessageDelegatingHandler {
                 reply(responseMessage);
 
             } else {
-                MessageHandler handler = ZenChatServer.getHandler(payloadType);
+                MessageHandler handler = MessageHandlers.getHandler(payloadType);
                 Object response = handler.handle(message.getPayload());
 
                 Message responseMessage = new Message<>(UUID.randomUUID().toString(), response, message.getIdentifier(), new Headers());

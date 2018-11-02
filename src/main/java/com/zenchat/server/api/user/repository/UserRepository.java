@@ -1,5 +1,6 @@
-package com.zenchat.server.api.registration.repository;
+package com.zenchat.server.api.user.repository;
 
+import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.repository.Repository;
 
 public interface UserRepository extends Repository<User> {

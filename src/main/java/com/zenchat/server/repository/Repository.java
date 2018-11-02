@@ -3,7 +3,7 @@ package com.zenchat.server.repository;
 import java.util.List;
 
 public interface Repository<T> {
-    T save(T user);
+    void save(T user);
 
     List<T> findAll();
 

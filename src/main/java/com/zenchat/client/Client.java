@@ -108,7 +108,7 @@ public class Client {
                     return responseMessage;
                 }, executorService)
                 .handle((tMessage, throwable) -> {
-                    if(throwable != null) {
+                    if(throwable != null && errorCallback != null) {
                         errorCallback.onError(throwable.getCause());
                     }
 

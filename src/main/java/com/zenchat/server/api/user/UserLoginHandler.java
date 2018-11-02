@@ -1,8 +1,8 @@
-package com.zenchat.server.api.login;
+package com.zenchat.server.api.user;
 
 import com.zenchat.model.api.login.LoginUserRequest;
 import com.zenchat.model.api.login.UserLoginResponse;
-import com.zenchat.server.api.registration.repository.UserRepository;
+import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;
 
 public class UserLoginHandler implements MessageHandler<UserLoginResponse, LoginUserRequest> {

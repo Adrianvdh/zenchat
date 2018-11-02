@@ -5,7 +5,7 @@ import com.zenchat.common.message.protocol.Initialize;
 import java.util.HashMap;
 import java.util.Map;
 
-public class ProtocolMessages {
+public final class ProtocolMessages {
 
     private static Map<Class, ProtocolMessageHandler> protocolMessages = new HashMap<>();
 

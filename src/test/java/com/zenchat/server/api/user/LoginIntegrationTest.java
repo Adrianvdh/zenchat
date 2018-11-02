@@ -1,4 +1,4 @@
-package com.zenchat.server.api.login;
+package com.zenchat.server.api.user;
 
 import com.zenchat.client.Client;
 import com.zenchat.common.message.Message;
@@ -6,10 +6,10 @@ import com.zenchat.model.api.login.LoginUserRequest;
 import com.zenchat.model.api.login.UserLoginResponse;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.ZenChatTestServer;
-import com.zenchat.server.api.registration.repository.UserRepository;
-import com.zenchat.server.config.ServerConfiguration;
-import org.junit.After;
+import com.zenchat.server.api.AbstractIntegrationTest;
+import com.zenchat.server.api.user.repository.UserRepository;
+import com.zenchat.server.api.user.RegistrationException;
+import com.zenchat.server.repository.Repositories;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -17,37 +17,26 @@ import org.junit.Test;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-public class LoginIntegrationTest {
+import static com.zenchat.server.api.user.UserConstants.NAME;
+import static com.zenchat.server.api.user.UserConstants.PASSWORD;
+import static com.zenchat.server.api.user.UserConstants.USERNAME;
 
-    private ZenChatTestServer server;
-    private String host = "localhost";
-    private int port;
-
+public class LoginIntegrationTest extends AbstractIntegrationTest {
+    
     @Before
     public void setUp() {
-        ServerConfiguration serverConfiguration = ServerConfiguration.fromProperties("application.properties");
-        server = new ZenChatTestServer(serverConfiguration);
-        server.startup();
-
-        port = serverConfiguration.getPort();
-
-        UserRepository userRepository = ZenChatTestServer.getRepository(UserRepository.class);
+        UserRepository userRepository = Repositories.getRepository(UserRepository.class);
         userRepository.deleteAll();
-    }
-
-    @After
-    public void tearDown() {
-        server.shutdown();
     }
 
     @Test
     public void testLoginUser_userLoginsIn_expectSessionTokenResponse() throws ExecutionException, InterruptedException {
-        Client client = new Client(host, port);
+        Client client = new Client(HOST, PORT);
         client.connect();
 
-        registerUser("adrian", "Test1234", "Adrian van den Houten", client);
+        registerUser(USERNAME, PASSWORD, NAME, client);
 
-        Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest("adrian", "Test1234"));
+        Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(USERNAME, PASSWORD));
         Future<Message<UserLoginResponse>> responseMessageFuture = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
 
         Message<UserLoginResponse> responseMessage = responseMessageFuture.get();

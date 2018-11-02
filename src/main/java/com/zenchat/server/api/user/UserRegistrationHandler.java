@@ -1,10 +1,12 @@
-package com.zenchat.server.api.registration;
+package com.zenchat.server.api.user;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
-import com.zenchat.server.api.registration.repository.User;
-import com.zenchat.server.api.registration.repository.UserRepository;
+import com.zenchat.server.api.user.model.User;
+import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;
+
+import java.util.UUID;
 
 public class UserRegistrationHandler implements MessageHandler<UserRegisterResponse, RegisterUserRequest> {
 
@@ -19,8 +21,8 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
         if(userRepository.exists(registerUserRequest.getUsername())) {
             throw new RegistrationException("Registration failed");
         }
-        userRepository.save(new User(registerUserRequest.getUsername()));
+        userRepository.save(new User(UUID.randomUUID().toString(), registerUserRequest.getUsername(), registerUserRequest.getPassword()));
 
-        return new UserRegisterResponse(registerUserRequest.getUsername(), registerUserRequest.getName());
+        return new UserRegisterResponse(registerUserRequest.getName(), registerUserRequest.getUsername());
     }
 }

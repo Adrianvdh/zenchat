@@ -17,7 +17,7 @@ public class RegistrationService {
     }
 
     public void registerUser(String username, String password) {
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(username, password, null));
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(username, password, "name"));
 
         Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, throwable -> {
             System.out.println("Error occurred" + throwable.getMessage());
