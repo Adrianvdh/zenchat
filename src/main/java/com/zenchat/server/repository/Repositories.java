@@ -14,14 +14,6 @@ public final class Repositories {
     protected Repositories() {
     }
 
-    private static Repositories getInstance() {
-        return INSTANCE;
-    }
-
-    protected static void constructSingleton(Repositories repositories) {
-        INSTANCE = repositories;
-    }
-
     public static <T extends Repository> T getRepository(Class<T> repository) {
         if (!getInstance().repositories.containsKey(repository)) {
             throw new RepositoryException(String.format("Repository '%s' could not be found. Please register this repository first!", repository.getSimpleName()));
@@ -33,5 +25,13 @@ public final class Repositories {
         this.repositories.put(repository, repositoryImpl);
 
         log.info("Registered repository '{}'", repositoryImpl.getClass().getSimpleName());
+    }
+
+    protected static void constructSingleton(Repositories repositories) {
+        INSTANCE = repositories;
+    }
+
+    private static Repositories getInstance() {
+        return INSTANCE;
     }
 }

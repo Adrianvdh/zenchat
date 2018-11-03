@@ -11,15 +11,7 @@ public class MessageHandlers {
 
     private Map<Class, MessageHandler> handlers = new HashMap<>();
 
-    public MessageHandlers() {
-    }
-
-    private static MessageHandlers getInstance() {
-        return INSTANCE;
-    }
-
-    protected static void constructSingleton(MessageHandlers messageHandlers) {
-        INSTANCE = messageHandlers;
+    protected MessageHandlers() {
     }
 
     public static MessageHandler getHandler(Class requestClass) {
@@ -32,9 +24,17 @@ public class MessageHandlers {
         return getInstance().handlers.get(requestClass);
     }
 
-    public <T extends MessageHandler> void registerOne(Class request, T messageHandler) {
+    protected  <T extends MessageHandler> void registerOne(Class request, T messageHandler) {
         this.handlers.put(request, messageHandler);
 
         log.info("Registered message handler '{}'", messageHandler.getClass().getSimpleName());
+    }
+
+    protected static void constructSingleton(MessageHandlers messageHandlers) {
+        INSTANCE = messageHandlers;
+    }
+
+    private static MessageHandlers getInstance() {
+        return INSTANCE;
     }
 }
