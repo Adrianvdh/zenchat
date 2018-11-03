@@ -7,6 +7,7 @@ import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public class UserRegistrationHandler implements MessageHandler<UserRegisterResponse, RegisterUserRequest> {
@@ -19,9 +20,11 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
 
     @Override
     public UserRegisterResponse handle(RegisterUserRequest registerUserRequest) {
-        if(userRepository.exists(registerUserRequest.getUsername())) {
-            throw new RegistrationException("Registration failed");
+        Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(registerUserRequest.getUsername()));
+        if (userOptional.isPresent()) {
+            throw new RegistrationException("This user is already registered!");
         }
+
         userRepository.save(new User(UUID.randomUUID().toString(), registerUserRequest.getUsername(), registerUserRequest.getPassword()));
 
         return new UserRegisterResponse(registerUserRequest.getName(), registerUserRequest.getUsername());

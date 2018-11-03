@@ -35,12 +35,12 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
     public void testExistsQuery_saveUser_expectUserExists() {
         userRepository.save(new User(UUID.randomUUID().toString(), "user1", "test123"));
 
-        Assert.assertTrue(userRepository.exists("user1"));
+        Assert.assertNotNull(userRepository.findByUsername("user1"));
     }
 
     @Test
     public void testExistsQuery_saveNothing_expectUserDoesntExist() {
-        Assert.assertFalse(userRepository.exists("user1"));
+        Assert.assertNull(userRepository.findByUsername("user1"));
     }
 
     @Test
@@ -51,6 +51,6 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
         userRepository.deleteAll();
 
-        Assert.assertFalse(userRepository.exists("user1"));
+        Assert.assertNull(userRepository.findByUsername("user1"));
     }
 }

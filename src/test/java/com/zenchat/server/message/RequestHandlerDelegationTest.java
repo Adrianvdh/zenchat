@@ -17,7 +17,7 @@ public class RequestHandlerDelegationTest {
     @Test
     public void testHandleMessageDelegation() {
         UserRepository mockUserRepository = Mockito.mock(UserRepository.class);
-        Mockito.when(mockUserRepository.exists(USERNAME)).thenReturn(false);
+        Mockito.when(mockUserRepository.findByUsername(USERNAME)).thenReturn(null);
 
         UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(mockUserRepository);
 

@@ -45,7 +45,7 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
         String correlationId = responseMessage.getCorrelationId();
         Assert.assertEquals(requestId, correlationId);
 
-        Assert.assertNotNull(userLoginResponse.getToken());
+        Assert.assertNotNull(userLoginResponse.getSessionId());
 
         client.disconnect();
     }

@@ -3,26 +3,24 @@ package com.zenchat.server.api.user.repository;
 import com.mongodb.client.FindIterable;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
+import com.zenchat.server.api.user.model.Session;
 import com.zenchat.server.api.user.model.User;
 import org.bson.Document;
-import org.bson.conversions.Bson;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.mongodb.client.model.Updates.combine;
+import static com.mongodb.client.model.Updates.set;
 
 public class UserRepositoryImpl implements UserRepository {
-    private MongoCollection<Document> usersCollection;
+    private MongoCollection<User> usersCollection;
 
-    public UserRepositoryImpl(MongoCollection<Document> usersCollection) {
+    public UserRepositoryImpl(MongoCollection<User> usersCollection) {
         this.usersCollection = usersCollection;
     }
 
     @Override
     public void save(User user) {
-        Document document = new Document();
-        document.put("_id", user.getUserId());
-        document.put("username", user.getUsername());
-        document.put("password", user.getPassword());
-        usersCollection.insertOne(document);
+        usersCollection.insertOne(user);
     }
 
     @Override
@@ -30,23 +28,21 @@ public class UserRepositoryImpl implements UserRepository {
         usersCollection.deleteMany(new Document());
     }
 
+    @SuppressWarnings("ConstantConditions")
     @Override
     public User findByUsername(String username) {
-        FindIterable<Document> userDocument = usersCollection.find(new Document("username", username));
-        Document document = userDocument.first();
-        User user = new User(
-                document.get("_id", String.class),
-                document.get("username", String.class),
-                document.get("password", String.class)
-        );
-        return user;
+        FindIterable<User> userDocument = usersCollection.find(Filters.eq("username", username));
+        return userDocument.first();
     }
 
     @Override
-    public boolean exists(String username) {
-        FindIterable<Document> userDocument = usersCollection.find(eq("username", username));
-        Document document = userDocument.first();
-        return document != null;
+    public void updateUserSession(String userId, Session session) {
+        usersCollection.updateOne(
+                eq("_id", userId),
+                combine(
+                        set("sessionId", session.getSessionId()),
+                        set("expirationDate", session.getExpirationDate())
+                )
+        );
     }
-
 }

@@ -8,5 +8,5 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class UserLoginResponse implements Serializable {
-    private String token;
+    private String sessionId;
 }

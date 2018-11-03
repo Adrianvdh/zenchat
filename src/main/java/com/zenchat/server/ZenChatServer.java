@@ -1,5 +1,7 @@
 package com.zenchat.server;
 
+import com.mongodb.ConnectionString;
+import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
 import com.mongodb.client.MongoDatabase;
@@ -8,7 +10,12 @@ import com.zenchat.server.config.ServerPropertiesLoader;
 import com.zenchat.server.message.MessageHandlersConfigurer;
 import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.RepositoryConfigurer;
+import com.zenchat.server.repository.mongo.codec.JodaDateTimeCodec;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.codecs.configuration.CodecRegistry;
+import org.bson.codecs.pojo.PojoCodecProvider;
+
+import static org.bson.codecs.configuration.CodecRegistries.*;
 
 @Slf4j
 public class ZenChatServer {
@@ -23,10 +30,26 @@ public class ZenChatServer {
     public void startup() {
         log.info("ZenChat server is starting up...");
 
-        mongoClient = MongoClients.create(String.format("mongodb://%s:%s",
+        String mongoConnectionString = String.format("mongodb://%s:%s",
                 serverProperties.getDatabaseConfiguration().getHost(),
-                serverProperties.getDatabaseConfiguration().getPort())
+                serverProperties.getDatabaseConfiguration().getPort());
+
+
+        CodecRegistry codecRegistry = fromRegistries(
+                fromCodecs(new JodaDateTimeCodec()),
+                MongoClientSettings.getDefaultCodecRegistry(),
+                fromProviders(
+                        PojoCodecProvider.builder().automatic(true).build()
+                )
         );
+
+
+        MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .codecRegistry(codecRegistry)
+                .applyConnectionString(new ConnectionString(mongoConnectionString))
+                .build();
+
+        mongoClient = MongoClients.create(mongoClientSettings);
         MongoDatabase mongoDatabase = mongoClient.getDatabase(serverProperties.getDatabaseConfiguration().getName());
 
         RepositoryConfigurer.setupRepositories(mongoDatabase);
