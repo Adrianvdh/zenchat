@@ -5,8 +5,9 @@ import com.mongodb.client.MongoCollection;
 import com.mongodb.client.model.Filters;
 import com.zenchat.server.api.user.model.User;
 import org.bson.Document;
+import org.bson.conversions.Bson;
 
-import java.util.List;
+import static com.mongodb.client.model.Filters.eq;
 
 public class UserRepositoryImpl implements UserRepository {
     private MongoCollection<Document> usersCollection;
@@ -25,13 +26,8 @@ public class UserRepositoryImpl implements UserRepository {
     }
 
     @Override
-    public List<User> findAll() {
-        return null;
-    }
-
-    @Override
     public void deleteAll() {
-
+        usersCollection.deleteMany(new Document());
     }
 
     @Override
@@ -48,8 +44,9 @@ public class UserRepositoryImpl implements UserRepository {
 
     @Override
     public boolean exists(String username) {
-        FindIterable<Document> userDocument = usersCollection.find(Filters.eq("username", username));
+        FindIterable<Document> userDocument = usersCollection.find(eq("username", username));
         Document document = userDocument.first();
         return document != null;
     }
+
 }

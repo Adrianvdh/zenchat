@@ -2,6 +2,7 @@ package com.zenchat.server.api.user;
 
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
+import com.zenchat.server.api.user.exception.RegistrationException;
 import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;

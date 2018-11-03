@@ -30,4 +30,27 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
         User foundUser = userRepository.findByUsername(USERNAME);
         Assert.assertEquals(givenUser, foundUser);
     }
+
+    @Test
+    public void testExistsQuery_saveUser_expectUserExists() {
+        userRepository.save(new User(UUID.randomUUID().toString(), "user1", "test123"));
+
+        Assert.assertTrue(userRepository.exists("user1"));
+    }
+
+    @Test
+    public void testExistsQuery_saveNothing_expectUserDoesntExist() {
+        Assert.assertFalse(userRepository.exists("user1"));
+    }
+
+    @Test
+    public void testDeleteAll() {
+        userRepository.save(new User(UUID.randomUUID().toString(), "user1", "test123"));
+        userRepository.save(new User(UUID.randomUUID().toString(), "user2", "test123"));
+        userRepository.save(new User(UUID.randomUUID().toString(), "user3", "test123"));
+
+        userRepository.deleteAll();
+
+        Assert.assertFalse(userRepository.exists("user1"));
+    }
 }

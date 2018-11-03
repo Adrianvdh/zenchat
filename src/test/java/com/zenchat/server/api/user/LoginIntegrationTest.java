@@ -11,7 +11,6 @@ import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.repository.Repositories;
 import org.junit.Assert;
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
@@ -21,7 +20,7 @@ import static com.zenchat.server.api.user.UserConstants.*;
 
 public class LoginIntegrationTest extends AbstractIntegrationTest {
 
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Before
     public void setUp() {
@@ -52,7 +51,7 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
     }
 
     private void registerUser(String username, String password, String name, Client client) throws ExecutionException, InterruptedException {
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(username, password, name));
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(name, username, password));
 
         Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
             Assert.fail(t.getMessage());

@@ -10,9 +10,10 @@ import com.zenchat.server.repository.Repositories;
 public class MessageHandlersConfigurer {
     public static void setupMessageHandlers() {
         MessageHandlers messageHandlers = new MessageHandlers();
+        UserRepository userRepository = Repositories.getRepository(UserRepository.class);
 
-        messageHandlers.registerOne(RegisterUserRequest.class, new UserRegistrationHandler(Repositories.getRepository(UserRepository.class)));
-        messageHandlers.registerOne(LoginUserRequest.class, new UserLoginHandler(Repositories.getRepository(UserRepository.class)));
+        messageHandlers.registerOne(RegisterUserRequest.class, new UserRegistrationHandler(userRepository));
+        messageHandlers.registerOne(LoginUserRequest.class, new UserLoginHandler(userRepository));
 
         MessageHandlers.constructSingleton(messageHandlers);
     }
