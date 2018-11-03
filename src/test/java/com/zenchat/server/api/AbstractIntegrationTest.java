@@ -14,8 +14,6 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractIntegrationTest {
-    private static ServerProperties serverProperties;
-
     private static ZenChatServer server;
     private static MongodProcess mongod;
 
@@ -24,7 +22,7 @@ public abstract class AbstractIntegrationTest {
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        serverProperties = ServerPropertiesLoader.fromProperties("application.properties");
+        ServerProperties serverProperties = ServerPropertiesLoader.fromProperties("application.properties");
 
         IMongodConfig mongodConfig = new MongodConfigBuilder()
                 .version(Version.V3_4_15)
