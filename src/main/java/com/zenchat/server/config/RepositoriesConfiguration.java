@@ -10,7 +10,7 @@ import com.zenchat.server.repository.RepositoryRegistry;
 public class RepositoriesConfiguration {
 
     public static RepositoryRegistry configureRepositories(MongoDatabase mongoDatabase) {
-        return RepositoryRegistry.fromRepositories(
+        return RepositoryRegistry.fromProviders(
                 new RepositoryProvider<>(UserRepository.class, new UserRepositoryImpl(mongoDatabase.getCollection("users", User.class)))
         );
     }

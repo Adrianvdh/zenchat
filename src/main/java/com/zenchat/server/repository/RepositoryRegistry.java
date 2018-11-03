@@ -11,7 +11,7 @@ public class RepositoryRegistry {
         this.repositoryProviders = repositoryProviders;
     }
 
-    public static RepositoryRegistry fromRepositories(RepositoryProvider... repositoryProviders) {
+    public static RepositoryRegistry fromProviders(RepositoryProvider... repositoryProviders) {
         return new RepositoryRegistry(Arrays.asList(repositoryProviders));
     }
 
