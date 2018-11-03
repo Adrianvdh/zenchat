@@ -2,7 +2,6 @@ package com.zenchat.server.message;
 
 import com.zenchat.common.message.Headers;
 import com.zenchat.common.message.Message;
-import com.zenchat.server.config.MessageHandlers;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
 import lombok.extern.slf4j.Slf4j;

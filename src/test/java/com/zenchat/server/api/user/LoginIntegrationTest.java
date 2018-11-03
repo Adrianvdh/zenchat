@@ -8,24 +8,24 @@ import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.api.AbstractIntegrationTest;
 import com.zenchat.server.api.user.repository.UserRepository;
-import com.zenchat.server.api.user.RegistrationException;
 import com.zenchat.server.repository.Repositories;
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import static com.zenchat.server.api.user.UserConstants.NAME;
-import static com.zenchat.server.api.user.UserConstants.PASSWORD;
-import static com.zenchat.server.api.user.UserConstants.USERNAME;
+import static com.zenchat.server.api.user.UserConstants.*;
 
 public class LoginIntegrationTest extends AbstractIntegrationTest {
-    
+
+    UserRepository userRepository;
+
     @Before
     public void setUp() {
-        UserRepository userRepository = Repositories.getRepository(UserRepository.class);
+        userRepository = Repositories.getRepository(UserRepository.class);
         userRepository.deleteAll();
     }
 

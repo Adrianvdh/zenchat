@@ -15,6 +15,9 @@ public class UserLoginHandler implements MessageHandler<UserLoginResponse, Login
 
     @Override
     public UserLoginResponse handle(LoginUserRequest request) {
+        if(!userRepository.exists(request.getUsername())) {
+        }
+
         return new UserLoginResponse("Token");
     }
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 
 @Slf4j
 public final class Repositories {
-    protected static Repositories INSTANCE;
+    private static Repositories INSTANCE;
 
     private Map<Class, Repository> repositories = new HashMap<>();
 

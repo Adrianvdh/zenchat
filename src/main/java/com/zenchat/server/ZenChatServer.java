@@ -1,16 +1,20 @@
 package com.zenchat.server;
 
+import com.mongodb.client.MongoClient;
+import com.mongodb.client.MongoClients;
+import com.mongodb.client.MongoDatabase;
 import com.zenchat.server.config.ServerProperties;
 import com.zenchat.server.config.ServerPropertiesLoader;
+import com.zenchat.server.message.MessageHandlersConfigurer;
 import com.zenchat.server.network.SocketServer;
+import com.zenchat.server.repository.RepositoryConfigurer;
 import lombok.extern.slf4j.Slf4j;
-
-import static com.zenchat.server.repository.RepositoryConfigurer.setupDatabase;
 
 @Slf4j
 public class ZenChatServer {
     private ServerProperties serverProperties;
     private SocketServer server;
+    private MongoClient mongoClient;
 
     public ZenChatServer(ServerProperties serverProperties) {
         this.serverProperties = serverProperties;
@@ -19,7 +23,15 @@ public class ZenChatServer {
     public void startup() {
         log.info("ZenChat server is starting up...");
 
-        setupDatabase(serverProperties);
+        mongoClient = MongoClients.create(String.format("mongodb://%s:%s",
+                serverProperties.getDatabaseConfiguration().getHost(),
+                serverProperties.getDatabaseConfiguration().getPort())
+        );
+        MongoDatabase mongoDatabase = mongoClient.getDatabase(serverProperties.getDatabaseConfiguration().getName());
+
+        RepositoryConfigurer.setupRepositories(mongoDatabase);
+        MessageHandlersConfigurer.setupMessageHandlers();
+
         server = new SocketServer(serverProperties.getPort());
         server.start();
     }
@@ -29,6 +41,10 @@ public class ZenChatServer {
 
         if (server != null) {
             server.stop();
+        }
+
+        if (mongoClient != null) {
+            mongoClient.close();
         }
     }
 

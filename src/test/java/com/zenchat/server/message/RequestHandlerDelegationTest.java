@@ -4,7 +4,6 @@ import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.api.user.UserRegistrationHandler;
 import com.zenchat.server.api.user.repository.UserRepository;
-import com.zenchat.server.config.MessageHandlers;
 import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;

@@ -3,7 +3,6 @@ package com.zenchat.server.api;
 import com.zenchat.server.ZenChatServer;
 import com.zenchat.server.config.ServerProperties;
 import com.zenchat.server.config.ServerPropertiesLoader;
-import com.zenchat.server.repository.RepositoryConfigurer;
 import de.flapdoodle.embed.mongo.MongodProcess;
 import de.flapdoodle.embed.mongo.MongodStarter;
 import de.flapdoodle.embed.mongo.config.IMongodConfig;
@@ -15,39 +14,40 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractIntegrationTest {
-    protected static ServerProperties serverProperties;
-    protected static ZenChatServer server;
+    private static ServerProperties serverProperties;
 
-    private static MongodProcess mongodProcess;
+    private static ZenChatServer server;
+    private static MongodProcess mongod;
 
     protected static int PORT;
     protected static String HOST;
 
     @BeforeClass
     public static void beforeClass() throws Exception {
-        IMongodConfig mongodConfig = new MongodConfigBuilder()
-                .version(Version.Main.PRODUCTION)
-                .net(new Net(27018, false))
-                .build();
-
-        mongodProcess = MongodStarter.getDefaultInstance()
-                .prepare(mongodConfig)
-                .start();
-
         serverProperties = ServerPropertiesLoader.fromProperties("application.properties");
 
-        RepositoryConfigurer.setupDatabase(serverProperties);
+        IMongodConfig mongodConfig = new MongodConfigBuilder()
+                .version(Version.V3_4_15)
+                .net(new Net(27018, false))
+                .timeout(new Timeout(60000))
+                .build();
+
+        mongod = MongodStarter.getDefaultInstance()
+                .prepare(mongodConfig)
+                .start();
 
         server = new ZenChatServer(serverProperties);
         server.startup();
 
+        HOST = "localhost";
         PORT = serverProperties.getPort();
     }
 
     @AfterClass
     public static void breakDown() {
         server.shutdown();
-        mongodProcess.stop();
+
+        mongod.stop();
     }
 
 }

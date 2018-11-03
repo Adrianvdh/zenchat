@@ -19,10 +19,12 @@ import java.util.concurrent.Future;
 import static com.zenchat.server.api.user.UserConstants.*;
 
 public class RegistrationIntegrationTest extends AbstractIntegrationTest {
-    
+
+    private UserRepository userRepository;
+
     @Before
     public void setUp() {
-        UserRepository userRepository = Repositories.getRepository(UserRepository.class);
+        userRepository = Repositories.getRepository(UserRepository.class);
         userRepository.deleteAll();
     }
 
@@ -44,6 +46,7 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
         Assert.assertTrue(error[0].getClass().isAssignableFrom(RegistrationException.class));
         client.disconnect();
     }
+
 
     @Test
     public void testRegisterUser_expectUserRegistrationSuccess() throws ExecutionException, InterruptedException {
@@ -67,4 +70,5 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
         client.disconnect();
     }
+
 }
