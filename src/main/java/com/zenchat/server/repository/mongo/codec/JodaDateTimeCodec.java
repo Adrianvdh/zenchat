@@ -1,6 +1,5 @@
 package com.zenchat.server.repository.mongo.codec;
 
-
 import org.bson.BsonReader;
 import org.bson.BsonWriter;
 import org.bson.codecs.Codec;

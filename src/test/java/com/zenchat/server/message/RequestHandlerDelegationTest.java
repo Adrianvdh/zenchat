@@ -29,7 +29,7 @@ public class RequestHandlerDelegationTest {
 
     @Test
     public void testChooseMessageHandlerByRequest_expectCorrectHandlerSelected() {
-        MessageHandler registrationHandler = MessageHandlers.getHandler(RegisterUserRequest.class);
+        MessageHandler registrationHandler = MessageHandlers.getHandler(RegisterUserRequest.class).getMessageHandler();
 
         Assert.assertTrue(registrationHandler.getClass().isAssignableFrom(UserRegistrationHandler.class));
     }

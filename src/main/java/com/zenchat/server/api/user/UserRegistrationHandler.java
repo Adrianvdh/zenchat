@@ -20,6 +20,7 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
 
     @Override
     public UserRegisterResponse handle(RegisterUserRequest registerUserRequest) {
+
         Optional<User> userOptional = Optional.ofNullable(userRepository.findByUsername(registerUserRequest.getUsername()));
         if (userOptional.isPresent()) {
             throw new RegistrationException("This user is already registered!");

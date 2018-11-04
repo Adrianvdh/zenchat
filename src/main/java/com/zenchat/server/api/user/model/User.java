@@ -1,5 +1,6 @@
 package com.zenchat.server.api.user.model;
 
+import com.zenchat.server.security.SecurityRole;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,6 +15,7 @@ public class User {
     private String userId;
     private String username;
     private String password;
+    private SecurityRole securityRole;
     private Session session;
 
     public User(String userId, String username, String password) {

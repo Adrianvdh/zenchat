@@ -2,8 +2,13 @@ package com.zenchat.server.message;
 
 import com.zenchat.common.message.Headers;
 import com.zenchat.common.message.Message;
+import com.zenchat.server.api.user.exception.AuthenticationException;
+import com.zenchat.server.api.user.model.User;
+import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
+import com.zenchat.server.repository.Repositories;
+import com.zenchat.server.security.SecurityRole;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;
@@ -30,8 +35,28 @@ public class MessageDelegatingHandler {
                 reply(responseMessage);
 
             } else {
-                MessageHandler handler = MessageHandlers.getHandler(payloadType);
-                Object response = handler.handle(message.getPayload());
+                MessageHandlerProvider handlerProvider = MessageHandlers.getHandler(payloadType);
+
+                if (handlerProvider.getHandlerMeta() != null) {
+                    SecurityRole roleRequired = handlerProvider.getHandlerMeta().getRoleRequired();
+
+                    if (!message.getHeaders().containsHeader("SESSIONID")) {
+                        throw new AuthenticationException("Please login first!");
+                    }
+                    String sessionId = message.getHeaders().get("SESSIONID");
+
+                    UserRepository userRepository = Repositories.getRepository(UserRepository.class);
+                    User user = userRepository.findBySessionId(sessionId);
+                    SecurityRole userSecurityRole = user.getSecurityRole();
+
+                    if (roleRequired != userSecurityRole) {
+                        throw new AuthenticationException("Please login first!");
+                    }
+
+                }
+
+
+                Object response = handlerProvider.getMessageHandler().handle(message.getPayload());
 
                 Message responseMessage = new Message<>(UUID.randomUUID().toString(), response, message.getIdentifier(), new Headers());
                 reply(responseMessage);

@@ -19,6 +19,10 @@ public class Message<T> implements Serializable {
         this(UUID.randomUUID().toString(), payload, null, new Headers());
     }
 
+    public Message(T payload, Headers headers) {
+        this(UUID.randomUUID().toString(), payload, null, headers);
+    }
+
     public Message(T payload, String correlationId) {
         this(UUID.randomUUID().toString(), payload, correlationId, new Headers());
     }
