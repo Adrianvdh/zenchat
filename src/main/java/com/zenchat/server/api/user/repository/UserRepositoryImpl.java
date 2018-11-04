@@ -40,8 +40,8 @@ public class UserRepositoryImpl implements UserRepository {
         usersCollection.updateOne(
                 eq("_id", userId),
                 combine(
-                        set("sessionId", session.getSessionId()),
-                        set("expirationDate", session.getExpirationDate())
+                        set("session.sessionId", session.getSessionId()),
+                        set("session.expirationDate", session.getExpirationDate())
                 )
         );
     }
