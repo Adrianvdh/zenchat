@@ -3,6 +3,7 @@ package com.zenchat.server.api.user.repository;
 import com.zenchat.server.api.AbstractIntegrationTest;
 import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.repository.Repositories;
+import com.zenchat.server.security.SecurityRole;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,7 +24,7 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void testSaveUser() {
-        User givenUser = new User(UUID.randomUUID().toString(), USERNAME, PASSWORD);
+        User givenUser = new User(UUID.randomUUID().toString(), USERNAME, PASSWORD, SecurityRole.USER);
 
         userRepository.save(givenUser);
 
@@ -33,21 +34,21 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void testExistsQuery_saveUser_expectUserExists() {
-        userRepository.save(new User(UUID.randomUUID().toString(), "user1", "test123"));
+        userRepository.save(new User(UUID.randomUUID().toString(), USERNAME, PASSWORD, SecurityRole.USER));
 
-        Assert.assertNotNull(userRepository.findByUsername("user1"));
+        Assert.assertNotNull(userRepository.findByUsername(USERNAME));
     }
 
     @Test
     public void testExistsQuery_saveNothing_expectUserDoesntExist() {
-        Assert.assertNull(userRepository.findByUsername("user1"));
+        Assert.assertNull(userRepository.findByUsername(USERNAME));
     }
 
     @Test
     public void testDeleteAll() {
-        userRepository.save(new User(UUID.randomUUID().toString(), "user1", "test123"));
-        userRepository.save(new User(UUID.randomUUID().toString(), "user2", "test123"));
-        userRepository.save(new User(UUID.randomUUID().toString(), "user3", "test123"));
+        userRepository.save(new User(UUID.randomUUID().toString(), "user1", PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), "user2", PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), "user3", PASSWORD, SecurityRole.USER));
 
         userRepository.deleteAll();
 

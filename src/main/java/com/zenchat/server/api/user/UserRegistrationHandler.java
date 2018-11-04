@@ -6,6 +6,7 @@ import com.zenchat.server.api.user.exception.RegistrationException;
 import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.MessageHandler;
+import com.zenchat.server.security.SecurityRole;
 
 import java.util.Optional;
 import java.util.UUID;
@@ -26,7 +27,7 @@ public class UserRegistrationHandler implements MessageHandler<UserRegisterRespo
             throw new RegistrationException("This user is already registered!");
         }
 
-        userRepository.save(new User(UUID.randomUUID().toString(), registerUserRequest.getUsername(), registerUserRequest.getPassword()));
+        userRepository.save(new User(UUID.randomUUID().toString(), registerUserRequest.getUsername(), registerUserRequest.getPassword(), SecurityRole.USER));
 
         return new UserRegisterResponse(registerUserRequest.getName(), registerUserRequest.getUsername());
     }

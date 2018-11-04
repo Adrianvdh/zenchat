@@ -18,9 +18,10 @@ public class User {
     private SecurityRole securityRole;
     private Session session;
 
-    public User(String userId, String username, String password) {
+    public User(String userId, String username, String password, SecurityRole securityRole) {
         this.userId = userId;
         this.username = username;
         this.password = password;
+        this.securityRole = securityRole;
     }
 }
