@@ -23,7 +23,7 @@ public class RegistrationComponent {
         registrationViewController.initModel(registrationModel);
 
 
-        Scene regScene = new Scene(registrationView.getParent(), 382, 231);
+        Scene regScene = new Scene(registrationView.getParent(),  382, 510);
         Stage stage = new Stage();
         stage.initOwner(primaryStage);
         stage.initModality(Modality.APPLICATION_MODAL);
@@ -36,7 +36,7 @@ public class RegistrationComponent {
             stage.hide();
         });
 
-        stage.setTitle("New Window");
+        stage.setTitle("Register");
         stage.setScene(regScene);
         stage.showAndWait();
     }

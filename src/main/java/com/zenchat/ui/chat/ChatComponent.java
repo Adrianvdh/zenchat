@@ -2,7 +2,7 @@ package com.zenchat.ui.chat;
 
 import com.zenchat.client.Client;
 import com.zenchat.ui.chat.model.User;
-import com.zenchat.ui.registration.RegistrationComponent;
+import com.zenchat.ui.login.LoginComponent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -30,12 +30,12 @@ public class ChatComponent {
         });
 
         Scene scene = new Scene(chatView.getParent(), 800, 550);
-        primaryStage.setTitle("JavaFX ChatApp");
+        primaryStage.setTitle("ZenChat");
         primaryStage.setScene(scene);
         primaryStage.show();
 
-        RegistrationComponent registrationComponent = new RegistrationComponent(client);
-        registrationComponent.show(primaryStage);
+        LoginComponent loginComponent = new LoginComponent(client);
+        loginComponent.show(primaryStage);
 
         chatViewModel.addUser(new User("Adrian", User.Status.ONLINE));
         chatViewModel.addUser(new User("Josie", User.Status.ONLINE));

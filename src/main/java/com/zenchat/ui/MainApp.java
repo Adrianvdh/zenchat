@@ -1,6 +1,7 @@
 package com.zenchat.ui;
 
 import com.zenchat.client.Client;
+import com.zenchat.client.ClientException;
 import com.zenchat.ui.chat.ChatComponent;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,9 +13,13 @@ public class MainApp extends Application {
     }
 
     @Override
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         Client client = new Client("localhost", 33120);
-        client.connect();
+        try {
+            client.connect();
+        } catch (ClientException e) {
+            e.printStackTrace();
+        }
 
         ChatComponent chatModule = new ChatComponent(client);
         chatModule.show(primaryStage);

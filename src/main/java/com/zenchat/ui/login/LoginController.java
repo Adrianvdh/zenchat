@@ -1,13 +1,14 @@
-package com.zenchat.ui.registration;
+package com.zenchat.ui.login;
 
 import com.zenchat.ui.FxController;
+import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class RegistrationController extends Dialog implements FxController<RegistrationViewModel> {
+public class LoginController extends Dialog implements FxController<LoginViewModel> {
 
     @FXML
     private AnchorPane regPane;
@@ -18,10 +19,10 @@ public class RegistrationController extends Dialog implements FxController<Regis
     @FXML
     private TextField passwordTextfield;
 
-    private RegistrationViewModel registrationViewModel;
+    private LoginViewModel registrationViewModel;
 
     @Override
-    public void initModel(RegistrationViewModel registrationModel) {
+    public void initModel(LoginViewModel registrationModel) {
         this.registrationViewModel = registrationModel;
 
         regPane.requestFocus(); // Delegate the focus to container
@@ -33,16 +34,12 @@ public class RegistrationController extends Dialog implements FxController<Regis
     }
 
     @FXML
-    public void onRegisterButtonClick(Event event) {
+    public void onLoginButtonClick(ActionEvent event) {
 
-        String username = usernameTextfield.getText();
-        String password = passwordTextfield.getText();
-
-        registrationViewModel.register(usernameTextfield.getText(), passwordTextfield.getText());
     }
 
     @FXML
-    public void onCancelButtonClicked(Event event) {
+    public void onSignUpLinkClick(ActionEvent event) {
 
     }
 }
