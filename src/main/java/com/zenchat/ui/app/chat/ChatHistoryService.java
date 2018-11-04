@@ -1,6 +1,6 @@
-package com.zenchat.ui.chat;
+package com.zenchat.ui.app.chat;
 
-import com.zenchat.ui.chat.model.ChatMessage;
+import com.zenchat.ui.app.chat.model.ChatMessage;
 
 import java.util.*;
 

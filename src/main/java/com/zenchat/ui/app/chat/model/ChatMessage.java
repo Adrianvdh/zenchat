@@ -1,4 +1,4 @@
-package com.zenchat.ui.chat.model;
+package com.zenchat.ui.app.chat.model;
 
 import java.time.LocalDateTime;
 

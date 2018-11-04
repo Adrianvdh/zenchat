@@ -1,4 +1,4 @@
-package com.zenchat.ui.registration;
+package com.zenchat.ui.app.registration;
 
 import com.zenchat.client.Client;
 import javafx.scene.Scene;

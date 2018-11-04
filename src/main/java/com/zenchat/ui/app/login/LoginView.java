@@ -1,4 +1,4 @@
-package com.zenchat.ui.login;
+package com.zenchat.ui.app.login;
 
 import com.zenchat.ui.FxView;
 

@@ -6,19 +6,34 @@
 <?import javafx.scene.image.Image?>
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
 
-<AnchorPane fx:id="regPane" prefHeight="492.0" prefWidth="382.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zenchat.ui.registration.RegistrationController">
+<AnchorPane fx:id="regPane" prefHeight="592.0" prefWidth="900.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zenchat.ui.app.registration.RegistrationController">
    <children>
-      <Button fx:id="registerButton" layoutX="68.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="34.0" prefWidth="119.0" text="Register" />
-      <TextField fx:id="firstNameTextField" alignment="CENTER" layoutX="68.0" layoutY="195.0" prefHeight="34.0" prefWidth="246.0" promptText="First Name" />
-      <Button fx:id="cancelButton" layoutX="195.0" layoutY="410.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefHeight="34.0" prefWidth="119.0" text="Cancel" />
-      <TextField fx:id="lastNameTextField" alignment="CENTER" layoutX="68.0" layoutY="248.0" prefHeight="34.0" prefWidth="246.0" promptText="Last Name" />
-      <TextField fx:id="userNameTextField" alignment="CENTER" layoutX="68.0" layoutY="300.0" prefHeight="34.0" prefWidth="246.0" promptText="User Name" />
-      <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="68.0" layoutY="354.0" prefHeight="34.0" prefWidth="246.0" promptText="Password" />
-      <ImageView fitHeight="167.0" fitWidth="195.0" layoutX="104.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
-         <image>
-            <Image url="@../images/zen-chat-icon.png" />
-         </image>
-      </ImageView>
+      <HBox alignment="CENTER" prefHeight="642.0" prefWidth="956.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <VBox alignment="CENTER" prefHeight="565.0" prefWidth="275.0">
+               <children>
+                  <Pane prefHeight="458.0" prefWidth="275.0">
+                     <children>
+                        <Button fx:id="registerButton" layoutX="14.0" layoutY="410.0" mnemonicParsing="false" onAction="#onRegisterButtonClick" prefHeight="34.0" prefWidth="119.0" text="Register" />
+                        <TextField fx:id="firstNameTextField" alignment="CENTER" layoutX="14.0" layoutY="195.0" prefHeight="34.0" prefWidth="246.0" promptText="First Name" />
+                        <Button fx:id="cancelButton" layoutX="141.0" layoutY="410.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefHeight="34.0" prefWidth="119.0" text="Cancel" />
+                        <TextField fx:id="lastNameTextField" alignment="CENTER" layoutX="14.0" layoutY="248.0" prefHeight="34.0" prefWidth="246.0" promptText="Last Name" />
+                        <TextField fx:id="userNameTextField" alignment="CENTER" layoutX="14.0" layoutY="300.0" prefHeight="34.0" prefWidth="246.0" promptText="User Name" />
+                        <PasswordField fx:id="passwordField" alignment="CENTER" layoutX="14.0" layoutY="354.0" prefHeight="34.0" prefWidth="246.0" promptText="Password" />
+                        <ImageView fitHeight="167.0" fitWidth="195.0" layoutX="50.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@../images/zen-chat-icon.png" />
+                           </image>
+                        </ImageView>
+                     </children>
+                  </Pane>
+               </children>
+            </VBox>
+         </children>
+      </HBox>
    </children>
 </AnchorPane>

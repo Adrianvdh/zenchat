@@ -1,4 +1,4 @@
-package com.zenchat.ui.registration;
+package com.zenchat.ui.app.registration;
 
 import com.zenchat.ui.FxController;
 import javafx.event.Event;
@@ -13,10 +13,16 @@ public class RegistrationController extends Dialog implements FxController<Regis
     private AnchorPane regPane;
 
     @FXML
+    private TextField firstNameTextField;
+
+    @FXML
+    private TextField lastNameTextField;
+
+    @FXML
     private TextField usernameTextfield;
 
     @FXML
-    private TextField passwordTextfield;
+    private TextField passwordField;
 
     private RegistrationViewModel registrationViewModel;
 
@@ -35,10 +41,12 @@ public class RegistrationController extends Dialog implements FxController<Regis
     @FXML
     public void onRegisterButtonClick(Event event) {
 
+        String firstName = firstNameTextField.getText();
+        String lastName  = lastNameTextField.getText();
         String username = usernameTextfield.getText();
-        String password = passwordTextfield.getText();
+        String password = passwordField.getText();
 
-        registrationViewModel.register(usernameTextfield.getText(), passwordTextfield.getText());
+        registrationViewModel.register(username, password);
     }
 
     @FXML

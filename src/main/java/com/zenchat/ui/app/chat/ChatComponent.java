@@ -1,8 +1,9 @@
-package com.zenchat.ui.chat;
+package com.zenchat.ui.app.chat;
 
 import com.zenchat.client.Client;
-import com.zenchat.ui.chat.model.User;
-import com.zenchat.ui.login.LoginComponent;
+import com.zenchat.ui.app.chat.model.User;
+import com.zenchat.ui.app.login.LoginComponent;
+import com.zenchat.ui.app.login.LoginView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
@@ -29,10 +30,14 @@ public class ChatComponent {
             System.out.println("Recieved message");
         });
 
+        LoginView loginView = new LoginView();
+
         Scene scene = new Scene(chatView.getParent(), 800, 550);
         primaryStage.setTitle("ZenChat");
         primaryStage.setScene(scene);
         primaryStage.show();
+
+        scene.setRoot(loginView.getParent());
 
         LoginComponent loginComponent = new LoginComponent(client);
         loginComponent.show(primaryStage);

@@ -1,7 +1,7 @@
-package com.zenchat.ui.chat;
+package com.zenchat.ui.app.chat;
 
-import com.zenchat.ui.chat.model.ChatMessage;
-import com.zenchat.ui.chat.model.User;
+import com.zenchat.ui.app.chat.model.ChatMessage;
+import com.zenchat.ui.app.chat.model.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 

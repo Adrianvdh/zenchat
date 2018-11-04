@@ -1,14 +1,14 @@
-package com.zenchat.ui.login;
+package com.zenchat.ui.app.login;
 
 import com.zenchat.client.Client;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 public class LoginComponent {
 
     private LoginView loginView = new LoginView();
-    private LoginViewModel loginViewModel = new LoginViewModel();
+    private LoginViewModel loginViewModel;
     private LoginService loginService;
 
     private Client client;
@@ -18,26 +18,20 @@ public class LoginComponent {
         loginService = new LoginService(client);
     }
 
-    public void show(Stage primaryStage) {
+    public void show(Stage stage) {
         LoginController loginController = loginView.getController();
+        loginViewModel = new LoginViewModel(stage);
         loginController.initModel(loginViewModel);
 
-
-        Scene regScene = new Scene(loginView.getParent(),  382, 418);
-        Stage stage = new Stage();
-        stage.initOwner(primaryStage);
-        stage.initModality(Modality.APPLICATION_MODAL);
-
+        Parent parent = loginView.getParent();
+        Scene loginScene = new Scene(loginView.getParent());
         loginViewModel.onLogin((username, password) -> {
-            System.out.println("Registering " + username);
-
+            System.out.println("Login " + username);
             loginService.loginUser(username, password);
 
-            stage.hide();
         });
 
         stage.setTitle("Login");
-        stage.setScene(regScene);
-        stage.showAndWait();
+        stage.setScene(loginScene);
     }
 }
