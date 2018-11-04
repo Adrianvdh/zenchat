@@ -2,14 +2,11 @@ package com.zenchat.server.message;
 
 import com.zenchat.common.message.Headers;
 import com.zenchat.common.message.Message;
-import com.zenchat.server.api.user.exception.AuthenticationException;
-import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
 import com.zenchat.server.repository.Repositories;
 import com.zenchat.server.security.PreAuthorizeAspect;
-import com.zenchat.server.security.SecurityRole;
 import lombok.extern.slf4j.Slf4j;
 
 import java.io.IOException;

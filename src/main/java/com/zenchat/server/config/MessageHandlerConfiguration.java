@@ -11,7 +11,6 @@ import com.zenchat.server.message.HandlerMeta;
 import com.zenchat.server.message.MessageHandlerProvider;
 import com.zenchat.server.message.MessageHandlerRegistry;
 import com.zenchat.server.repository.Repositories;
-
 import com.zenchat.server.security.SecurityRole;
 
 public class MessageHandlerConfiguration {

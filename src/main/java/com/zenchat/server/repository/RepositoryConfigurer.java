@@ -1,9 +1,6 @@
 package com.zenchat.server.repository;
 
 import com.mongodb.client.MongoDatabase;
-import com.zenchat.server.api.user.model.User;
-import com.zenchat.server.api.user.repository.UserRepository;
-import com.zenchat.server.api.user.repository.UserRepositoryImpl;
 import com.zenchat.server.config.RepositoriesConfiguration;
 
 public class RepositoryConfigurer {
