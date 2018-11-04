@@ -7,6 +7,7 @@ import com.zenchat.model.api.login.UserLoginResponse;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.api.AbstractIntegrationTest;
+import com.zenchat.server.api.user.exception.AuthenticationException;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.repository.Repositories;
 import org.junit.Assert;
@@ -47,6 +48,20 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
 
         Assert.assertNotNull(userLoginResponse.getSessionId());
 
+        client.disconnect();
+    }
+
+    @Test
+    public void testLoginUser_userNotExist_expectNoTokenResponse() throws ExecutionException, InterruptedException {
+        Client client = new Client(HOST, PORT);
+        client.connect();
+
+        Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(USERNAME, PASSWORD));
+
+        final Throwable[] error = new Throwable[1];
+        client.send(requestMessage, t -> error[0] = t).get();
+
+        Assert.assertTrue(error[0].getCause().getClass() == AuthenticationException.class);
         client.disconnect();
     }
 

@@ -8,6 +8,8 @@ import com.zenchat.server.repository.mongo.codec.JodaDateTimeCodec;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.bson.codecs.configuration.CodecRegistries.*;
 
 public class MongoConfiguration {
@@ -19,6 +21,7 @@ public class MongoConfiguration {
         CodecRegistry codecRegistry = fromRegistries(fromCodecs(new JodaDateTimeCodec()), MongoClientSettings.getDefaultCodecRegistry(), fromProviders(pojoCodecProvider));
 
         MongoClientSettings mongoClientSettings = MongoClientSettings.builder()
+                .applyToConnectionPoolSettings(builder -> builder.maxConnectionIdleTime(10, TimeUnit.SECONDS))
                 .codecRegistry(codecRegistry)
                 .applyConnectionString(new ConnectionString(mongoConnectionString))
                 .build();

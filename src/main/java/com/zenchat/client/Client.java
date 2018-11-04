@@ -91,7 +91,6 @@ public class Client {
 
         return CompletableFuture
                 .supplyAsync(() -> {
-
                     Message<R> responseMessage;
                     try {
                         responseMessage = waitForServerResponse();
@@ -114,30 +113,6 @@ public class Client {
 
                     return tMessage;
                 });
-    }
-
-    public static void main(String[] args) {
-
-        CompletableFuture<String> completableFuture = CompletableFuture.supplyAsync(() -> {
-            throw new RuntimeException("erorr");
-        }).handle(new BiFunction<Object, Throwable, String>() {
-            @Override
-            public String apply(Object o, Throwable throwable) {
-                return null;
-            }
-        });
-
-        try {
-            String s = completableFuture.get();
-            System.out.println("s = " + s);
-
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
-
-
     }
 
     private <T> Message<T> waitForServerResponse() throws IOException {

@@ -8,7 +8,7 @@ public class MessageHandlersConfigurer {
 
         MessageHandlerRegistry messageHandlerRegistry = MessageHandlerConfiguration.configureMessageHandlers();
         messageHandlerRegistry.getMessageHandlerProviders().forEach(messageHandlerProvider -> {
-            messageHandlers.registerOne(messageHandlerProvider.getRequest(), messageHandlerProvider.getMessageHandler());
+            messageHandlers.registerOne(messageHandlerProvider.getRequestClass(), messageHandlerProvider.getMessageHandler());
         });
 
         MessageHandlers.constructSingleton(messageHandlers);
