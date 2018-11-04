@@ -8,6 +8,7 @@ import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.protocol.ProtocolMessageHandler;
 import com.zenchat.server.message.protocol.ProtocolMessages;
 import com.zenchat.server.repository.Repositories;
+import com.zenchat.server.security.PreAuthorizeAspect;
 import com.zenchat.server.security.SecurityRole;
 import lombok.extern.slf4j.Slf4j;
 
@@ -37,24 +38,8 @@ public class MessageDelegatingHandler {
             } else {
                 MessageHandlerProvider handlerProvider = MessageHandlers.getHandler(payloadType);
 
-                if (handlerProvider.getHandlerMeta() != null) {
-                    SecurityRole roleRequired = handlerProvider.getHandlerMeta().getRoleRequired();
-
-                    if (!message.getHeaders().containsHeader("SESSIONID")) {
-                        throw new AuthenticationException("Please login first!");
-                    }
-                    String sessionId = message.getHeaders().get("SESSIONID");
-
-                    UserRepository userRepository = Repositories.getRepository(UserRepository.class);
-                    User user = userRepository.findBySessionId(sessionId);
-                    SecurityRole userSecurityRole = user.getSecurityRole();
-
-                    if (roleRequired != userSecurityRole) {
-                        throw new AuthenticationException("Please login first!");
-                    }
-
-                }
-
+                PreAuthorizeAspect preAuthorizeAspect = new PreAuthorizeAspect(Repositories.getRepository(UserRepository.class));
+                preAuthorizeAspect.preAuthorize(handlerProvider.getHandlerMeta(), message);
 
                 Object response = handlerProvider.getMessageHandler().handle(message.getPayload());
 
@@ -63,7 +48,6 @@ public class MessageDelegatingHandler {
 
             }
         } catch (Throwable e) {
-            log.error("An exception occurred", e);
             try {
                 replyThrowable(new Message<>(e, message.getIdentifier()));
             } catch (IOException ioe) {

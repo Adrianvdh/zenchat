@@ -22,6 +22,7 @@ import org.junit.Test;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
+import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
 import static com.zenchat.server.api.user.UserConstants.NAME;
 import static com.zenchat.server.api.user.UserConstants.PASSWORD;
 import static com.zenchat.server.api.user.UserConstants.USERNAME;
@@ -46,7 +47,7 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
         String sessionId = loginUser(USERNAME, PASSWORD, client);
 
         Headers headers = new Headers();
-        headers.addHeader("SESSIONID", sessionId);
+        headers.addHeader(SESSION_ID, sessionId);
         Message<ListUsersRequest> requestMessage = new Message<>(new ListUsersRequest(), headers);
 
         Future<Message<UserListResponse>> responseMessageFuture = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
