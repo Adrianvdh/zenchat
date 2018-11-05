@@ -16,7 +16,7 @@ public final class Repositories {
 
     public static <T extends Repository> T getRepository(Class<T> repository) {
         if (!getInstance().repositories.containsKey(repository)) {
-            throw new RepositoryException(String.format("Repository '%s' could not be found. Please register this repository first!", repository.getSimpleName()));
+            throw new RepositoryException(String.format("Repository '%s' could not be found. Please login this repository first!", repository.getSimpleName()));
         }
         return (T) getInstance().repositories.get(repository);
     }

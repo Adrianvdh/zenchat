@@ -1,11 +1,13 @@
 package com.zenchat.ui.app.registration;
 
 import com.zenchat.client.Client;
+import com.zenchat.ui.framework.component.Component;
+import com.zenchat.ui.framework.component.FxView;
+import com.zenchat.ui.framework.scene.Scenes;
 import javafx.scene.Scene;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 
-public class RegistrationComponent {
+public class RegistrationComponent implements Component {
 
     private RegistrationView registrationView = new RegistrationView();
     private RegistrationViewModel registrationModel = new RegistrationViewModel();
@@ -23,21 +25,21 @@ public class RegistrationComponent {
         registrationViewController.initModel(registrationModel);
 
 
-        Scene regScene = new Scene(registrationView.getParent(),  382, 510);
-        Stage stage = new Stage();
-        stage.initOwner(primaryStage);
-        stage.initModality(Modality.APPLICATION_MODAL);
-
         registrationModel.onRegister((username, password) -> {
-            System.out.println("Registering " + username);
-
             registrationService.registerUser(username, password);
 
-            stage.hide();
+            Scenes.changeScene("LoginComponent");
         });
 
-        stage.setTitle("Register");
-        stage.setScene(regScene);
-        stage.showAndWait();
+        registrationModel.onCancel(() -> {
+            Scenes.changeScene("LoginComponent");
+        });
+
+        primaryStage.setTitle("Register");
+    }
+
+    @Override
+    public FxView fxView() {
+        return registrationView;
     }
 }

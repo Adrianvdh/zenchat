@@ -1,6 +1,6 @@
 package com.zenchat.ui.app.registration;
 
-import com.zenchat.ui.FxController;
+import com.zenchat.ui.framework.component.FxController;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Dialog;
@@ -19,7 +19,7 @@ public class RegistrationController extends Dialog implements FxController<Regis
     private TextField lastNameTextField;
 
     @FXML
-    private TextField usernameTextfield;
+    private TextField userNameTextField;
 
     @FXML
     private TextField passwordField;
@@ -43,7 +43,7 @@ public class RegistrationController extends Dialog implements FxController<Regis
 
         String firstName = firstNameTextField.getText();
         String lastName  = lastNameTextField.getText();
-        String username = usernameTextfield.getText();
+        String username = userNameTextField.getText();
         String password = passwordField.getText();
 
         registrationViewModel.register(username, password);
@@ -51,6 +51,6 @@ public class RegistrationController extends Dialog implements FxController<Regis
 
     @FXML
     public void onCancelButtonClicked(Event event) {
-
+        registrationViewModel.cancel();
     }
 }

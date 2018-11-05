@@ -1,16 +1,16 @@
 package com.zenchat.ui.app.login;
 
 import com.zenchat.client.Client;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import com.zenchat.ui.framework.component.Component;
+import com.zenchat.ui.framework.component.FxView;
+import com.zenchat.ui.framework.scene.Scenes;
 import javafx.stage.Stage;
 
-public class LoginComponent {
+public class LoginComponent implements Component {
 
     private LoginView loginView = new LoginView();
     private LoginViewModel loginViewModel;
     private LoginService loginService;
-
     private Client client;
 
     public LoginComponent(Client client) {
@@ -18,20 +18,33 @@ public class LoginComponent {
         loginService = new LoginService(client);
     }
 
+    @Override
     public void show(Stage stage) {
         LoginController loginController = loginView.getController();
+
         loginViewModel = new LoginViewModel(stage);
         loginController.initModel(loginViewModel);
 
-        Parent parent = loginView.getParent();
-        Scene loginScene = new Scene(loginView.getParent());
+        stage.setTitle("Login");
+
         loginViewModel.onLogin((username, password) -> {
             System.out.println("Login " + username);
-            loginService.loginUser(username, password);
+//            loginService.loginUser(username, password);
 
+            Scenes.changeScene("ChatComponent");
         });
 
-        stage.setTitle("Login");
-        stage.setScene(loginScene);
+        loginViewModel.onCancel(() -> {
+            Scenes.changeScene("ServerAddressComponent");
+        });
+
+        loginViewModel.onSignUp(() -> {
+            Scenes.changeScene("RegistrationComponent");
+        });
+    }
+
+    @Override
+    public FxView fxView() {
+        return loginView;
     }
 }

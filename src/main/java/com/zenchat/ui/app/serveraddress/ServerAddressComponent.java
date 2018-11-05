@@ -2,26 +2,30 @@ package com.zenchat.ui.app.serveraddress;
 
 import com.zenchat.client.Client;
 import com.zenchat.ui.app.login.LoginComponent;
+import com.zenchat.ui.framework.component.Component;
+import com.zenchat.ui.framework.component.FxView;
+import com.zenchat.ui.framework.scene.Scenes;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ServerComponent {
+public class ServerAddressComponent implements Component {
 
     private ServerAddressView serverAddressView = new ServerAddressView();
     private ServerAddressViewModel serverAddressViewModel;
 
     private Client client;
 
-    public ServerComponent(Client client) {
+    public ServerAddressComponent(Client client) {
         this.client = client;
     }
 
+    @Override
     public void show(Stage primaryStage) {
+        primaryStage.setTitle("Connect");
+
         ServerAddressController loginController = serverAddressView.getController();
         serverAddressViewModel = new ServerAddressViewModel(primaryStage);
         loginController.initModel(serverAddressViewModel);
-
-        Scene regScene = new Scene(serverAddressView.getParent());
 
         LoginComponent loginComponent = new LoginComponent(client);
 
@@ -29,10 +33,14 @@ public class ServerComponent {
             System.out.println("Address " + address);
 
             loginComponent.show(primaryStage);
+
+            Scenes.changeScene("LoginComponent");
         });
 
-        primaryStage.setTitle("Connect");
-        primaryStage.setScene(regScene);
-        primaryStage.show();
+    }
+
+    @Override
+    public FxView fxView() {
+        return serverAddressView;
     }
 }

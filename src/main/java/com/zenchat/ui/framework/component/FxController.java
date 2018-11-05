@@ -1,4 +1,4 @@
-package com.zenchat.ui;
+package com.zenchat.ui.framework.component;
 
 public interface FxController<M> {
 

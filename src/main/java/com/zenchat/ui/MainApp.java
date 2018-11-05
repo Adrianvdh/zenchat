@@ -1,8 +1,9 @@
 package com.zenchat.ui;
 
-import com.zenchat.client.Client;
-import com.zenchat.ui.app.chat.ChatComponent;
-import com.zenchat.ui.app.serveraddress.ServerComponent;
+import com.zenchat.ui.app.AppModule;
+import com.zenchat.ui.framework.scene.Scenes;
+import com.zenchat.ui.framework.module.ModuleProvider;
+import com.zenchat.ui.framework.scene.StagesConfigurer;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
@@ -14,13 +15,16 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        Client client = new Client("localhost", 33120);
-
         primaryStage.setHeight(600);
         primaryStage.setWidth(900);
 
-        ServerComponent serverComponent = new ServerComponent(client);
-        serverComponent.show(primaryStage);
+        StagesConfigurer.configureStages(
+                new ModuleProvider("AppModule", AppModule.componentRegistry(), primaryStage)
+        );
+
+        Scenes.changeScene("ServerAddressComponent");
+
+        primaryStage.show();
     }
 
     @Override

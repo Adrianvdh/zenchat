@@ -38,7 +38,7 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
         final Throwable[] error = {null};
 
-        // when the client issues the same register command
+        // when the client issues the same login command
         client.send(requestMessage, throwable -> error[0] = throwable).get();
 
         // expect an RegistrationException to occur

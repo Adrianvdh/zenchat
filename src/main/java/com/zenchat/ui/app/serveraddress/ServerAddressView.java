@@ -1,6 +1,6 @@
 package com.zenchat.ui.app.serveraddress;
 
-import com.zenchat.ui.FxView;
+import com.zenchat.ui.framework.component.FxView;
 
 import java.net.URL;
 

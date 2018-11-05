@@ -1,15 +1,11 @@
 package com.zenchat.ui.app.login;
 
-import com.zenchat.ui.FxController;
-import com.zenchat.ui.app.registration.RegistrationComponent;
-import com.zenchat.ui.app.registration.RegistrationView;
+import com.zenchat.ui.framework.component.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Dialog;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 
-public class LoginController extends Dialog implements FxController<LoginViewModel> {
+public class LoginController implements FxController<LoginViewModel> {
 
     @FXML
     private TextField userNameTextField;
@@ -17,36 +13,25 @@ public class LoginController extends Dialog implements FxController<LoginViewMod
     @FXML
     private TextField passwordField;
 
-    private LoginViewModel registrationViewModel;
+    private LoginViewModel loginViewModel;
 
     @Override
     public void initModel(LoginViewModel registrationModel) {
-        this.registrationViewModel = registrationModel;
+        this.loginViewModel = registrationModel;
     }
 
     @FXML
     public void onCancelButtonClicked(ActionEvent event) {
-        System.out.println("login canceled clicked");
-
+        loginViewModel.cancel();
     }
 
     @FXML
     public void onLoginButtonClick(ActionEvent event) {
-
-        String username = userNameTextField.getText();
-        String password = passwordField.getText();
-
-        registrationViewModel.register(username, password);
+        loginViewModel.login(userNameTextField.getText(), passwordField.getText());
     }
 
     @FXML
     public void onSignUpLinkClick(ActionEvent event) {
-        Stage primaryStage = registrationViewModel.getPrimaryStage();
-
-        RegistrationComponent registrationComponent = new RegistrationComponent(registrationViewModel.getClient());
-
-        primaryStage.getScene().setRoot(new RegistrationView().getParent());
-//        registrationComponent.show(primaryStage);
-
+        loginViewModel.signUp();
     }
 }

@@ -2,12 +2,12 @@ package com.zenchat.ui.app.chat;
 
 import com.zenchat.client.Client;
 import com.zenchat.ui.app.chat.model.User;
-import com.zenchat.ui.app.login.LoginComponent;
-import com.zenchat.ui.app.login.LoginView;
+import com.zenchat.ui.framework.component.Component;
+import com.zenchat.ui.framework.component.FxView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-public class ChatComponent {
+public class ChatComponent implements Component {
 
     private ChatView chatView = new ChatView();
     private ChatViewModel chatViewModel;
@@ -22,6 +22,7 @@ public class ChatComponent {
         chatViewModel = new ChatViewModel(chatHistoryService);
     }
 
+    @Override
     public void show(Stage primaryStage) {
         ChatController chatViewController = chatView.getController();
 
@@ -30,21 +31,15 @@ public class ChatComponent {
             System.out.println("Recieved message");
         });
 
-        LoginView loginView = new LoginView();
 
-        Scene scene = new Scene(chatView.getParent(), 800, 550);
         primaryStage.setTitle("ZenChat");
-        primaryStage.setScene(scene);
-        primaryStage.show();
-
-        scene.setRoot(loginView.getParent());
-
-        LoginComponent loginComponent = new LoginComponent(client);
-        loginComponent.show(primaryStage);
 
         chatViewModel.addUser(new User("Adrian", User.Status.ONLINE));
         chatViewModel.addUser(new User("Josie", User.Status.ONLINE));
+    }
 
-
+    @Override
+    public FxView fxView() {
+        return chatView;
     }
 }

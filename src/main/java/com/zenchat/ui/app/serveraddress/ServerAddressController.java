@@ -1,8 +1,6 @@
 package com.zenchat.ui.app.serveraddress;
 
-import com.zenchat.ui.FxController;
-import com.zenchat.ui.app.registration.RegistrationComponent;
-import com.zenchat.ui.app.registration.RegistrationView;
+import com.zenchat.ui.framework.component.FxController;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Dialog;
