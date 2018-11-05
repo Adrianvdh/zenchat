@@ -1,21 +1,14 @@
 package com.zenchat.ui.app.login;
 
-import javafx.stage.Stage;
 import lombok.Getter;
 
 import java.util.function.BiConsumer;
 
 @Getter
 public class LoginViewModel {
-    private Stage primaryStage;
-
     private BiConsumer<String, String> onRegisterHandler;
     private Runnable onCancelHandler;
     private Runnable onSignUpHandler;
-
-    public LoginViewModel(Stage primaryStage) {
-        this.primaryStage = primaryStage;
-    }
 
     public void onLogin(BiConsumer<String, String> handler) {
         this.onRegisterHandler = handler;

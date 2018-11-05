@@ -20,24 +20,24 @@ public class ServerAddressComponent implements Component {
     }
 
     @Override
-    public void show(Stage primaryStage) {
-        primaryStage.setTitle("Connect");
-
+    public void onInit() {
         ServerAddressController loginController = serverAddressView.getController();
-        serverAddressViewModel = new ServerAddressViewModel(primaryStage);
+        serverAddressViewModel = new ServerAddressViewModel();
         loginController.initModel(serverAddressViewModel);
-
-        LoginComponent loginComponent = new LoginComponent(client);
 
         serverAddressViewModel.onConnect((address) -> {
             System.out.println("Address " + address);
 
             client.connect(address, 33120);
-            loginComponent.show(primaryStage);
 
             Scenes.changeScene("LoginComponent");
         });
 
+    }
+
+    @Override
+    public String title() {
+        return "ZenChat | Connect";
     }
 
     @Override

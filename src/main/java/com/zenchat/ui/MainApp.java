@@ -6,7 +6,9 @@ import com.zenchat.ui.framework.module.ModuleProvider;
 import com.zenchat.ui.framework.scene.StagesConfigurer;
 import javafx.application.Application;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MainApp extends Application {
 
     public static void main(String[] args) {
@@ -25,6 +27,7 @@ public class MainApp extends Application {
         Scenes.changeScene("ServerAddressComponent");
 
         primaryStage.show();
+        log.info("Application started!");
     }
 
     @Override

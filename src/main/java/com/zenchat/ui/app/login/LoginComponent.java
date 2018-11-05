@@ -4,7 +4,6 @@ import com.zenchat.client.Client;
 import com.zenchat.ui.framework.component.Component;
 import com.zenchat.ui.framework.component.FxView;
 import com.zenchat.ui.framework.scene.Scenes;
-import javafx.stage.Stage;
 
 public class LoginComponent implements Component {
 
@@ -19,16 +18,13 @@ public class LoginComponent implements Component {
     }
 
     @Override
-    public void show(Stage stage) {
+    public void onInit() {
         LoginController loginController = loginView.getController();
 
-        loginViewModel = new LoginViewModel(stage);
+        loginViewModel = new LoginViewModel();
         loginController.initModel(loginViewModel);
 
-        stage.setTitle("Login");
-
         loginViewModel.onLogin((username, password) -> {
-            System.out.println("Login " + username);
 //            loginService.loginUser(username, password);
 
             Scenes.changeScene("ChatComponent");
@@ -41,6 +37,11 @@ public class LoginComponent implements Component {
         loginViewModel.onSignUp(() -> {
             Scenes.changeScene("RegistrationComponent");
         });
+    }
+
+    @Override
+    public String title() {
+        return "ZenChat | Login";
     }
 
     @Override

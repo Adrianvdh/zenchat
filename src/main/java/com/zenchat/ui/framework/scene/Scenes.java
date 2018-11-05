@@ -1,6 +1,5 @@
 package com.zenchat.ui.framework.scene;
 
-import com.zenchat.server.repository.Repositories;
 import com.zenchat.ui.framework.component.FxView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;

@@ -4,8 +4,6 @@ import com.zenchat.client.Client;
 import com.zenchat.ui.framework.component.Component;
 import com.zenchat.ui.framework.component.FxView;
 import com.zenchat.ui.framework.scene.Scenes;
-import javafx.scene.Scene;
-import javafx.stage.Stage;
 
 public class RegistrationComponent implements Component {
 
@@ -20,10 +18,10 @@ public class RegistrationComponent implements Component {
         registrationService = new RegistrationService(client);
     }
 
-    public void show(Stage primaryStage) {
+    @Override
+    public void onInit() {
         RegistrationController registrationViewController = registrationView.getController();
         registrationViewController.initModel(registrationModel);
-
 
         registrationModel.onRegister((username, password) -> {
             registrationService.registerUser(username, password);
@@ -34,8 +32,11 @@ public class RegistrationComponent implements Component {
         registrationModel.onCancel(() -> {
             Scenes.changeScene("LoginComponent");
         });
+    }
 
-        primaryStage.setTitle("Register");
+    @Override
+    public String title() {
+        return "ZenChat | Registration";
     }
 
     @Override

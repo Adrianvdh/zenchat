@@ -1,10 +1,9 @@
 package com.zenchat.ui.framework.component;
 
-import javafx.stage.Stage;
-
 public interface Component {
+    void onInit();
 
-    void show(Stage stage);
+    String title();
 
     FxView fxView();
 }

@@ -6,7 +6,9 @@ import com.zenchat.ui.framework.component.Component;
 import com.zenchat.ui.framework.component.FxView;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class ChatComponent implements Component {
 
     private ChatView chatView = new ChatView();
@@ -23,19 +25,21 @@ public class ChatComponent implements Component {
     }
 
     @Override
-    public void show(Stage primaryStage) {
+    public void onInit() {
         ChatController chatViewController = chatView.getController();
 
         chatViewController.initModel(chatViewModel);
         chatViewModel.onSendMessage(chatMessage -> {
-            System.out.println("Recieved message");
+            System.out.println("Received message");
         });
-
-
-        primaryStage.setTitle("ZenChat");
 
         chatViewModel.addUser(new User("Adrian", User.Status.ONLINE));
         chatViewModel.addUser(new User("Josie", User.Status.ONLINE));
+    }
+
+    @Override
+    public String title() {
+        return "ZenChat";
     }
 
     @Override
