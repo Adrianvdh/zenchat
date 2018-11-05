@@ -32,6 +32,7 @@ public class ServerAddressComponent implements Component {
         serverAddressViewModel.onConnect((address) -> {
             System.out.println("Address " + address);
 
+            client.connect(address, 33120);
             loginComponent.show(primaryStage);
 
             Scenes.changeScene("LoginComponent");

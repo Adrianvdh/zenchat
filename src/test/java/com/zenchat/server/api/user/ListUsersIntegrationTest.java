@@ -39,8 +39,8 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testListRegisteredUsers_requiresAuthentication_expectUserListResponse() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         registerUser(USERNAME, PASSWORD, NAME, client);
 
@@ -62,8 +62,8 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testListRegisteredUsers_requiresAuthentication_userNotLoggedIn_expectUnauthorized() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         Message<ListUsersRequest> requestMessage = new Message<>(new ListUsersRequest());
 

@@ -31,8 +31,8 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testLoginUser_userLoginsIn_expectSessionTokenResponse() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         registerUser(USERNAME, PASSWORD, NAME, client);
 
@@ -53,8 +53,8 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testLoginUser_userNotExist_expectNoTokenResponse() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(USERNAME, PASSWORD));
 

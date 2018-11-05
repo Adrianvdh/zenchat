@@ -29,8 +29,8 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testRegisterUser_userExists_expectConflict() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         // given a user is registered
         Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(NAME, USERNAME, PASSWORD));
@@ -49,8 +49,8 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
     @Test
     public void testRegisterUser_expectUserRegistrationSuccess() throws ExecutionException, InterruptedException {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
 
         Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(NAME, USERNAME, PASSWORD));
 

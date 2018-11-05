@@ -21,8 +21,8 @@ import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
 public class Client {
     private Logger logger = LoggerFactory.getLogger(Client.class);
 
-    final String hostname;
-    final int port;
+    private String hostname;
+    private int port;
 
     private Socket socketConnection;
     private ObjectOutputStream outputStream;
@@ -34,10 +34,7 @@ public class Client {
     private List<String> unAcknowledgedMessageIds = new ArrayList<>();
     private String sessionId;
 
-    public Client(String hostname, int port) {
-        this.hostname = hostname;
-        this.port = port;
-    }
+    public Client() {}
 
     /**
      * try connect the client to the server using the host and port specified in the constructor.
@@ -47,7 +44,10 @@ public class Client {
      * <p>
      * This method blocks while waiting for a server acknowledgement.
      */
-    public void connect() {
+    public void connect(String hostname, int port) {
+        this.hostname = hostname;
+        this.port = port;
+
         logger.info("Client connecting to server {}:{}", hostname, port);
         if (socketConnection == null) {
             trySetupInAndOutStreams();

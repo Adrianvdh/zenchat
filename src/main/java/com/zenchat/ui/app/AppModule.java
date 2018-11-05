@@ -11,7 +11,7 @@ import com.zenchat.ui.framework.component.ComponentRegistry;
 public class AppModule {
 
     public static ComponentRegistry componentRegistry() {
-        Client client = new Client(null, 0);
+        Client client = new Client();
 
         return ComponentRegistry.fromComponentProviders(
                 new ComponentProvider("ChatComponent", new ChatComponent(client)),

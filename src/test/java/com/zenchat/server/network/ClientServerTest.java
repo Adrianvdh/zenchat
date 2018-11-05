@@ -25,21 +25,21 @@ public class ClientServerTest {
 
     @Test
     public void testConnectDisconnect() {
-        Client client = new Client(HOST, PORT);
-        client.connect();
+        Client client = new Client();
+        client.connect(HOST, PORT);
         client.disconnect();
     }
 
 
     @Test
     public void testOnConnect_clientConnects() {
-        Client client = new Client(HOST, PORT);
+        Client client = new Client();
 
         client.onConnect((ack) -> {
             System.out.println("Acknowledged onConnect : InitId: " + ack.getIdentifier());
         });
 
-        client.connect();
+        client.connect(HOST, PORT);
         client.disconnect();
         System.out.println("Disconnect");
     }
