@@ -17,8 +17,8 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-        primaryStage.setHeight(600);
-        primaryStage.setWidth(900);
+        primaryStage.setHeight(650);
+        primaryStage.setWidth(920);
 
         StagesConfigurer.configureStages(
                 new ModuleProvider("AppModule", AppModule.componentRegistry(), primaryStage)
@@ -32,6 +32,7 @@ public class MainApp extends Application {
 
     @Override
     public void stop() throws Exception {
+        log.info("Application shutting down");
 //        System.exit(0);
     }
 }
