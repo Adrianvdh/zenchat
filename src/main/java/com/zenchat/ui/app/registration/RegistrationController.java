@@ -56,7 +56,6 @@ public class RegistrationController extends Dialog implements FxController<Regis
             passwordLabel.setVisible("invalid".equals(newValue));
         });
 
-
     }
 
     @FXML

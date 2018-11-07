@@ -158,7 +158,7 @@ public class Client {
         } catch (ConnectException e) {
             throw new ClientException(String.format("An error occurred when connecting to the server! %s", e.getMessage()));
         } catch (IOException e) {
-            throw new ClientException(String.format("An error occurred! %s", e.getMessage()));
+            throw new ClientException("I/O error! Could not connect to server");
         }
     }
 
