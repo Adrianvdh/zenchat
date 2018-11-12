@@ -9,6 +9,7 @@ import com.zenchat.server.message.MessageHandlersConfigurer;
 import com.zenchat.server.network.SocketServer;
 import com.zenchat.server.repository.RepositoryConfigurer;
 import lombok.extern.slf4j.Slf4j;
+import org.bson.Document;
 
 @Slf4j
 public class ZenChatServer {
@@ -24,7 +25,16 @@ public class ZenChatServer {
         log.info("ZenChat server is starting up...");
 
         mongoClient = MongoConfiguration.configureMongo(serverProperties);
+
+        System.out.println("mongoClient " + mongoClient);
+
         MongoDatabase mongoDatabase = mongoClient.getDatabase(serverProperties.getDatabaseConfiguration().getName());
+        Document connectionStatus = mongoDatabase.runCommand(new Document("connectionStatus", 1));
+
+        System.out.println("connectionStatus " + connectionStatus);
+
+        System.out.println("mongoDatabase " + mongoDatabase);
+
 
         RepositoryConfigurer.setupRepositories(mongoDatabase);
         MessageHandlersConfigurer.setupMessageHandlers();

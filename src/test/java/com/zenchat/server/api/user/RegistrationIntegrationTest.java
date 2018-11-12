@@ -8,57 +8,40 @@ import com.zenchat.server.api.AbstractIntegrationTest;
 import com.zenchat.server.api.user.exception.RegistrationException;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.repository.Repositories;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
 
 import static com.zenchat.server.api.user.UserConstants.*;
 
 public class RegistrationIntegrationTest extends AbstractIntegrationTest {
 
+    private Client client;
     private UserRepository userRepository;
 
     @Before
     public void setUp() {
         userRepository = Repositories.getRepository(UserRepository.class);
         userRepository.deleteAll();
+
+        client = new Client();
+        client.connect(HOST, PORT);
     }
 
-    @Test
-    public void testRegisterUser_userExists_expectConflict() throws ExecutionException, InterruptedException {
-        Client client = new Client();
-        client.connect(HOST, PORT);
-
-        // given a user is registered
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(NAME, USERNAME, PASSWORD));
-        client.send(requestMessage, null).get();
-
-        final Throwable[] error = {null};
-
-        // when the client issues the same login command
-        client.send(requestMessage, throwable -> error[0] = throwable).get();
-
-        // expect an RegistrationException to occur
-        Assert.assertTrue(error[0].getClass().isAssignableFrom(RegistrationException.class));
+    @After
+    public void tearDown() throws Exception {
         client.disconnect();
     }
 
-
     @Test
-    public void testRegisterUser_expectUserRegistrationSuccess() throws ExecutionException, InterruptedException {
-        Client client = new Client();
-        client.connect(HOST, PORT);
-
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(NAME, USERNAME, PASSWORD));
-
-        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
-            Assert.fail(t.getMessage());
+    public void testRegisterUser_expectUserRegistrationSuccess() {
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD));
+        Message<UserRegisterResponse> responseMessage = client.send(requestMessage, throwable -> {
+            Assert.fail(throwable.getMessage());
         });
-
-        Message<UserRegisterResponse> responseMessage = responseMessageFuture.get();
         UserRegisterResponse userRegisterResponse = responseMessage.getPayload();
 
         String requestId = requestMessage.getIdentifier();
@@ -66,8 +49,21 @@ public class RegistrationIntegrationTest extends AbstractIntegrationTest {
         Assert.assertEquals(requestId, correlationId);
 
         Assert.assertEquals(USERNAME, userRegisterResponse.getUsername());
-
-        client.disconnect();
     }
 
+    @Test
+    public void testRegisterUser_userExists_expectConflict() {
+        // given a user is registered
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD));
+        client.send(requestMessage, throwable -> {
+            Assert.fail(throwable.getMessage());
+        });
+
+        final Throwable[] error = {null};
+        // when the client issues the same login command
+        client.send(requestMessage, throwable -> error[0] = throwable);
+
+        // expect an RegistrationException to occur
+        Assert.assertTrue(error[0].getClass().isAssignableFrom(RegistrationException.class));
+    }
 }

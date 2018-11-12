@@ -4,36 +4,45 @@ import com.zenchat.client.Client;
 import com.zenchat.common.message.Message;
 import com.zenchat.model.api.registration.RegisterUserRequest;
 import com.zenchat.model.api.registration.UserRegisterResponse;
+import lombok.extern.slf4j.Slf4j;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
+import java.util.function.Consumer;
 
+@Slf4j
 public class RegistrationService {
 
     private Client client;
+    private Consumer<Throwable> exceptionHandler;
+    private Consumer<UserRegisterResponse> successHandler;
 
     public RegistrationService(Client client) {
         this.client = client;
     }
 
-    public void registerUser(String username, String password) {
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(username, password, "name"));
-
-        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, throwable -> {
-            System.out.println("Error occurred" + throwable.getMessage());
-            return;
+    public void registerUser(String firstName, String lastName, String username, String password) {
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(firstName, lastName, username, password));
+        Message<UserRegisterResponse> responseMessage = client.send(requestMessage, throwable -> {
+            if (exceptionHandler != null) {
+                this.exceptionHandler.accept(throwable);
+            }
         });
 
-        Message<UserRegisterResponse> responseMessage = null;
-        try {
-            responseMessage = responseMessageFuture.get();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
+        if (responseMessage == null) {
+            return;
         }
         UserRegisterResponse userRegisterResponse = responseMessage.getPayload();
-        System.out.println("registered " + userRegisterResponse.getUsername());
+        log.info("{} was registered successfully!", userRegisterResponse.getFirstName());
 
+        if (successHandler != null) {
+            successHandler.accept(userRegisterResponse);
+        }
+    }
+
+    public void onError(Consumer<Throwable> exceptionHandler) {
+        this.exceptionHandler = exceptionHandler;
+    }
+
+    public void onSuccess(Consumer<UserRegisterResponse> successHandler) {
+        this.successHandler = successHandler;
     }
 }

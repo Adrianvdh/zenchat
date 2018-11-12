@@ -25,7 +25,7 @@ public class LoginComponent implements Component {
         loginController.initModel(loginViewModel);
 
         loginViewModel.onLogin((username, password) -> {
-//            loginService.loginUser(username, password);
+            loginService.loginUser(username, password);
 
             Scenes.changeScene("ChatComponent");
         });

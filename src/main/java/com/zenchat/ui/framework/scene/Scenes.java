@@ -31,8 +31,10 @@ public class Scenes {
     }
 
     public void registerScene(String componentName, FxView fxView, Stage stage) {
+        Scene scene = new Scene(fxView.getParent());
+        scene.getStylesheets().add("/styles/notification_view.css");
         componentStages.put(componentName, stage);
-        componentScenes.put(componentName, new Scene(fxView.getParent()));
+        componentScenes.put(componentName, scene);
     }
 
     public static Scenes getInstance() {

@@ -10,8 +10,8 @@ import org.junit.Test;
 
 import java.util.UUID;
 
-import static com.zenchat.server.api.user.UserConstants.PASSWORD;
-import static com.zenchat.server.api.user.UserConstants.USERNAME;
+import static com.zenchat.server.api.user.UserConstants.*;
+import static com.zenchat.server.api.user.UserConstants.LAST_NAME;
 
 public class UserRepositoryTest extends AbstractIntegrationTest {
 
@@ -24,7 +24,7 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void testSaveUser() {
-        User givenUser = new User(UUID.randomUUID().toString(), USERNAME, PASSWORD, SecurityRole.USER);
+        User givenUser = new User(UUID.randomUUID().toString(), FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, SecurityRole.USER);
 
         userRepository.save(givenUser);
 
@@ -34,7 +34,7 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void testExistsQuery_saveUser_expectUserExists() {
-        userRepository.save(new User(UUID.randomUUID().toString(), USERNAME, PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, SecurityRole.USER));
 
         Assert.assertNotNull(userRepository.findByUsername(USERNAME));
     }
@@ -46,9 +46,9 @@ public class UserRepositoryTest extends AbstractIntegrationTest {
 
     @Test
     public void testDeleteAll() {
-        userRepository.save(new User(UUID.randomUUID().toString(), "user1", PASSWORD, SecurityRole.USER));
-        userRepository.save(new User(UUID.randomUUID().toString(), "user2", PASSWORD, SecurityRole.USER));
-        userRepository.save(new User(UUID.randomUUID().toString(), "user3", PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), FIRST_NAME, LAST_NAME, "user1", PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), FIRST_NAME, LAST_NAME, "user2", PASSWORD, SecurityRole.USER));
+        userRepository.save(new User(UUID.randomUUID().toString(), FIRST_NAME, LAST_NAME, "user3", PASSWORD, SecurityRole.USER));
 
         userRepository.deleteAll();
 

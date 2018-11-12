@@ -6,6 +6,7 @@
             </Pattern>
         </layout>
     </appender>
+    <logger name="ch.qos.logback.*" level="OFF"/>
     <root >
         <appender-ref ref="STDOUT"/>
     </root>

@@ -8,9 +8,7 @@ import org.junit.Assert;
 import org.junit.Test;
 import org.mockito.Mockito;
 
-import static com.zenchat.server.api.user.UserConstants.NAME;
-import static com.zenchat.server.api.user.UserConstants.PASSWORD;
-import static com.zenchat.server.api.user.UserConstants.USERNAME;
+import static com.zenchat.server.api.user.UserConstants.*;
 
 public class RequestHandlerDelegationTest {
 
@@ -21,8 +19,8 @@ public class RequestHandlerDelegationTest {
 
         UserRegistrationHandler userRegistrationHandler = new UserRegistrationHandler(mockUserRepository);
 
-        UserRegisterResponse expectedResponse = new UserRegisterResponse(NAME, USERNAME);
-        UserRegisterResponse response = userRegistrationHandler.handle(new RegisterUserRequest(NAME, USERNAME, PASSWORD));
+        UserRegisterResponse expectedResponse = new UserRegisterResponse(FIRST_NAME, LAST_NAME, USERNAME);
+        UserRegisterResponse response = userRegistrationHandler.handle(new RegisterUserRequest(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD));
 
         Assert.assertEquals(expectedResponse, response);
     }

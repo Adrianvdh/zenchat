@@ -4,7 +4,6 @@ import com.zenchat.ui.framework.component.FxController;
 import com.zenchat.ui.framework.scene.Scenes;
 import com.zenchat.ui.shared.loader.LoaderView;
 import com.zenchat.ui.shared.notification.NotificationComponent;
-import com.zenchat.ui.shared.notification.NotificationView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Dialog;
@@ -60,7 +59,7 @@ public class ServerAddressController extends Dialog implements FxController<Serv
 
             NotificationComponent toastyComponent = new NotificationComponent(stackPane);
             toastyComponent.onClose(this::enable);
-            toastyComponent.show(message);
+            toastyComponent.showError(message);
         });
 
         serverAddressViewModel.getIsConnected().addListener((observable, oldValue, newValue) -> {

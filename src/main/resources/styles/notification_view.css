@@ -1,0 +1,10 @@
+.error {
+    -fx-background-color: #ff91a0;
+}
+.error .hyperlink {
+    -fx-text-fill: black;
+}
+
+.info {
+    -fx-background-color: #2bc7ff;
+}

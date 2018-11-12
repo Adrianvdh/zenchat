@@ -8,9 +8,7 @@ import com.zenchat.model.api.listuser.UserListResponse;
 import com.zenchat.model.api.login.LoginUserRequest;
 import com.zenchat.model.api.login.UserLoginResponse;
 import com.zenchat.model.api.registration.RegisterUserRequest;
-import com.zenchat.model.api.registration.UserRegisterResponse;
 import com.zenchat.server.api.AbstractIntegrationTest;
-import com.zenchat.server.api.user.exception.RegistrationException;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.repository.Repositories;
 import com.zenchat.server.security.AuthorizationException;
@@ -19,13 +17,8 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Future;
-
 import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
-import static com.zenchat.server.api.user.UserConstants.NAME;
-import static com.zenchat.server.api.user.UserConstants.PASSWORD;
-import static com.zenchat.server.api.user.UserConstants.USERNAME;
+import static com.zenchat.server.api.user.UserConstants.*;
 
 public class ListUsersIntegrationTest extends AbstractIntegrationTest {
 
@@ -38,11 +31,11 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
     }
 
     @Test
-    public void testListRegisteredUsers_requiresAuthentication_expectUserListResponse() throws ExecutionException, InterruptedException {
+    public void testListRegisteredUsers_requiresAuthentication_expectUserListResponse() {
         Client client = new Client();
         client.connect(HOST, PORT);
 
-        registerUser(USERNAME, PASSWORD, NAME, client);
+        registerUser(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, client);
 
         String sessionId = loginUser(USERNAME, PASSWORD, client);
 
@@ -50,9 +43,8 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
         headers.addHeader(SESSION_ID, sessionId);
         Message<ListUsersRequest> requestMessage = new Message<>(new ListUsersRequest(), headers);
 
-        Future<Message<UserListResponse>> responseMessageFuture = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
-        Message<UserListResponse> userListResponseMessage = responseMessageFuture.get();
-        UserListResponse response = userListResponseMessage.getPayload();
+        Message<UserListResponse> responseMessage = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
+        UserListResponse response = responseMessage.getPayload();
 
         Assert.assertThat(response.getUsers(), Matchers.contains(USERNAME));
 
@@ -61,37 +53,32 @@ public class ListUsersIntegrationTest extends AbstractIntegrationTest {
 
 
     @Test
-    public void testListRegisteredUsers_requiresAuthentication_userNotLoggedIn_expectUnauthorized() throws ExecutionException, InterruptedException {
+    public void testListRegisteredUsers_requiresAuthentication_userNotLoggedIn_expectUnauthorized() {
         Client client = new Client();
         client.connect(HOST, PORT);
 
         Message<ListUsersRequest> requestMessage = new Message<>(new ListUsersRequest());
 
         final Throwable[] error = new Throwable[1];
-        client.send(requestMessage, t -> error[0] = t).get();
+        client.send(requestMessage, t -> error[0] = t);
 
-        Assert.assertTrue(error[0].getClass().isAssignableFrom(AuthorizationException.class));
+        Assert.assertTrue(error[0].getClass() == AuthorizationException.class);
 
         client.disconnect();
     }
 
 
-    private String loginUser(String username, String password, Client client) throws ExecutionException, InterruptedException {
+    private String loginUser(String username, String password, Client client) {
         Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(username, password));
-        Future<Message<UserLoginResponse>> responseMessageFuture = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
+        Message<UserLoginResponse> responseMessage = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
 
-        Message<UserLoginResponse> responseMessage = responseMessageFuture.get();
         return responseMessage.getPayload().getSessionId();
     }
 
-    private void registerUser(String username, String password, String name, Client client) throws ExecutionException, InterruptedException {
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(name, username, password));
+    private void registerUser(String firstName, String lastName, String username, String password, Client client) {
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(firstName, lastName, username, password));
 
-        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
-            Assert.fail(t.getMessage());
-        });
-
-        responseMessageFuture.get();
+        client.send(requestMessage, throwable -> Assert.fail(throwable.getMessage()));
     }
 
 }

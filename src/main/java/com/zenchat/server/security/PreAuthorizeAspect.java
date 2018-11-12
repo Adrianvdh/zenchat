@@ -1,7 +1,6 @@
 package com.zenchat.server.security;
 
 import com.zenchat.common.message.Message;
-import com.zenchat.server.api.user.exception.AuthenticationException;
 import com.zenchat.server.api.user.model.User;
 import com.zenchat.server.api.user.repository.UserRepository;
 import com.zenchat.server.message.HandlerMeta;
@@ -21,7 +20,7 @@ public class PreAuthorizeAspect {
         }
 
         if (!message.getHeaders().containsHeader(SESSION_ID)) {
-            throw new AuthenticationException("Please login first!");
+            throw new AuthorizationException("Please login first!");
         }
         SecurityRole roleRequired = handlerMeta.getRoleRequired();
         String sessionId = message.getHeaders().get(SESSION_ID);
@@ -30,7 +29,7 @@ public class PreAuthorizeAspect {
         SecurityRole userSecurityRole = user.getSecurityRole();
 
         if (roleRequired != userSecurityRole) {
-            throw new AuthenticationException("You don't have permission to do this!");
+            throw new AuthorizationException("You don't have permission to do this!");
         }
     }
 }

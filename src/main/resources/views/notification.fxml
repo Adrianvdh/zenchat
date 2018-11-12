@@ -8,17 +8,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
-<Pane fx:controller="com.zenchat.ui.shared.notification.NotificationController" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="141.0" prefWidth="426.0" style="-fx-background-color: pink;" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1">
+<Pane fx:id="notificationPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="141.0" prefWidth="426.0" styleClass=".error" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.zenchat.ui.shared.notification.NotificationController">
    <children>
-      <ImageView fitHeight="65.0" fitWidth="73.0" layoutX="14.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
+      <ImageView fx:id="notificationImage" fitHeight="65.0" fitWidth="73.0" layoutX="14.0" layoutY="35.0" pickOnBounds="true" preserveRatio="true">
          <image>
             <Image url="@../images/warning-icon.png" />
          </image>
       </ImageView>
       <StackPane alignment="CENTER_LEFT" layoutX="90.0" layoutY="24.0" prefHeight="83.0" prefWidth="327.0">
          <children>
-            <Text fx:id="errorText" strokeType="OUTSIDE" strokeWidth="0.0" text="Error message this is my message that is really long that is really message" wrappingWidth="300.0">
+            <Text fx:id="notificationText" strokeType="OUTSIDE" strokeWidth="0.0" text="Error message this is my message that is really long that is really message" wrappingWidth="300.0">
                <font>
                   <Font name="Raleway" size="17.0" />
                </font>

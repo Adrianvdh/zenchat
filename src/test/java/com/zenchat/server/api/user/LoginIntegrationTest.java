@@ -34,12 +34,11 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
         Client client = new Client();
         client.connect(HOST, PORT);
 
-        registerUser(USERNAME, PASSWORD, NAME, client);
+        registerUser(FIRST_NAME, LAST_NAME, USERNAME, PASSWORD, client);
 
         Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(USERNAME, PASSWORD));
-        Future<Message<UserLoginResponse>> responseMessageFuture = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
+        Message<UserLoginResponse> responseMessage = client.send(requestMessage, t -> Assert.fail(t.getMessage()));
 
-        Message<UserLoginResponse> responseMessage = responseMessageFuture.get();
         UserLoginResponse userLoginResponse = responseMessage.getPayload();
 
         String requestId = requestMessage.getIdentifier();
@@ -59,20 +58,18 @@ public class LoginIntegrationTest extends AbstractIntegrationTest {
         Message<LoginUserRequest> requestMessage = new Message<>(new LoginUserRequest(USERNAME, PASSWORD));
 
         final Throwable[] error = new Throwable[1];
-        client.send(requestMessage, t -> error[0] = t).get();
+        client.send(requestMessage, t -> error[0] = t);
 
-        Assert.assertTrue(error[0].getCause().getClass() == AuthenticationException.class);
+        Assert.assertTrue(error[0].getClass() == AuthenticationException.class);
         client.disconnect();
     }
 
-    private void registerUser(String username, String password, String name, Client client) throws ExecutionException, InterruptedException {
-        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(name, username, password));
+    private void registerUser(String firstName, String lastName, String username, String password, Client client) throws ExecutionException, InterruptedException {
+        Message<RegisterUserRequest> requestMessage = new Message<>(new RegisterUserRequest(firstName, lastName, username, password));
 
-        Future<Message<UserRegisterResponse>> responseMessageFuture = client.send(requestMessage, t -> {
+        Message<UserRegisterResponse> responseMessage = client.send(requestMessage, t -> {
             Assert.fail(t.getMessage());
         });
-
-        responseMessageFuture.get();
     }
 
 }

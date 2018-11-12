@@ -6,15 +6,17 @@ import com.zenchat.common.message.protocol.Initialize;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.io.*;
+import java.io.EOFException;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.net.ConnectException;
 import java.net.Socket;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.concurrent.*;
-import java.util.function.BiFunction;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 import static com.zenchat.common.message.HeadersProperties.SESSION_ID;
 
@@ -53,17 +55,10 @@ public class Client {
             trySetupInAndOutStreams();
 
             Message<Initialize> initializeMessage = new Message<>(new Initialize());
-            Future<Message<AckMessage>> ackMessageFuture = send(initializeMessage, throwable -> {
+            Message<AckMessage> ackMessage = send(initializeMessage, throwable -> {
                 throw new RuntimeException(throwable);
             });
             unAcknowledgedMessageIds.add(initializeMessage.getIdentifier());
-
-            Message<AckMessage> ackMessage = null;
-            try {
-                ackMessage = ackMessageFuture.get();
-            } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
-            }
 
             String initializeMessageId = unAcknowledgedMessageIds.get(0);
             String ackId = ackMessage.getPayload().getIdentifier();
@@ -80,39 +75,34 @@ public class Client {
 
             logger.info("Client connected.");
         } else {
-            throw new ClientException("Cannot connect client that is already connected!");
+            disconnect();
+            connect(hostname, port);
         }
     }
 
-    public <T, R> Future<Message<R>> send(Message<T> message, ErrorCallback errorCallback) {
+    public <T, R> Message<R> send(Message<T> message, ErrorCallback errorCallback) {
         apply(message);
-
         unAcknowledgedMessageIds.add(message.getIdentifier());
 
-        return CompletableFuture
-                .supplyAsync(() -> {
-                    Message<R> responseMessage;
-                    try {
-                        responseMessage = waitForServerResponse();
-                    } catch (IOException e) {
-                        throw new RuntimeException("An I/O error occurred between the client and server!", e);
-                    }
+        Message<R> responseMessage;
+        try {
+            responseMessage = waitForServerResponse();
+        } catch (IOException e) {
+            throw new RuntimeException("An I/O error occurred between the client and server!", e);
+        }
 
-                    unAcknowledgedMessageIds.remove(responseMessage.getCorrelationId());
+        unAcknowledgedMessageIds.remove(responseMessage.getCorrelationId());
 
-                    if(Throwable.class.isAssignableFrom(responseMessage.getPayloadType())) {
-                        throw new RuntimeException((Throwable) responseMessage.getPayload());
-                    }
+        if (Throwable.class.isAssignableFrom(responseMessage.getPayloadType())) {
+            Throwable throwable = (Throwable) responseMessage.getPayload();
 
-                    return responseMessage;
-                }, executorService)
-                .handle((tMessage, throwable) -> {
-                    if(throwable != null && errorCallback != null) {
-                        errorCallback.onError(throwable.getCause());
-                    }
+            if (throwable != null && errorCallback != null) {
+                errorCallback.onError(throwable);
+                return null;
+            }
+        }
 
-                    return tMessage;
-                });
+        return responseMessage;
     }
 
     private <T> Message<T> waitForServerResponse() throws IOException {
@@ -166,7 +156,7 @@ public class Client {
      * Ends the network session with the server
      */
     public void disconnect() {
-        logger.info("Client trying to disconnect from server");
+        logger.info("Client disconnecting from server");
         if (socketConnection == null) {
             logger.warn("Could not disconnect because the client isn't connected yet!");
             return;

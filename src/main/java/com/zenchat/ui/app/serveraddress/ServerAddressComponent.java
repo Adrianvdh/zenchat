@@ -36,6 +36,7 @@ public class ServerAddressComponent implements Component {
                 serverAddressViewModel.getIsConnected().setValue(true);
             });
 
+            serverAddressViewModel.getIsConnected().set(false);
             try {
                 client.connect(address, 33120);
             } catch (ClientException e) {
@@ -43,9 +44,7 @@ public class ServerAddressComponent implements Component {
                 log.error("Connection error {}", e.getMessage());
                 return;
             }
-
         });
-
     }
 
     @Override

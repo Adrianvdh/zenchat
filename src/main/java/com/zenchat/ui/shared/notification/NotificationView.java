@@ -2,6 +2,7 @@ package com.zenchat.ui.shared.notification;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.image.Image;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,6 +28,14 @@ public class NotificationView {
 
     protected URL viewResource() {
         return getClass().getResource("/views/notification.fxml");
+    }
+
+    protected Image getWarningImage() {
+        return new Image("/images/warning-icon.png");
+    }
+
+    protected Image getInformationImage() {
+        return new Image("/images/warning-icon.png");
     }
 
     public Node getParent() {

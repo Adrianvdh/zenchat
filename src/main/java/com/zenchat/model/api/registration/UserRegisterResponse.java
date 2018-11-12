@@ -8,6 +8,7 @@ import java.io.Serializable;
 @Data
 @AllArgsConstructor
 public class UserRegisterResponse implements Serializable {
-    private String name;
+    private String firstName;
+    private String lastName;
     private String username;
 }
