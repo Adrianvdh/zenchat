@@ -1,6 +1,7 @@
 package com.zenchat.ui.app.registration;
 
 import com.zenchat.ui.framework.component.FxController;
+import com.zenchat.ui.framework.scene.Scenes;
 import com.zenchat.ui.shared.loader.LoaderView;
 import com.zenchat.ui.shared.notification.NotificationComponent;
 import javafx.application.Platform;
@@ -64,6 +65,10 @@ public class RegistrationController extends Dialog implements FxController<Regis
         this.registrationViewModel = registrationModel;
 
         ObservableList<String> errors = FXCollections.observableArrayList();
+        errors.add("first.name");
+        errors.add("last.name");
+        errors.add("username");
+        errors.add("password");
 
         // validate
         firstNameTxt.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -126,6 +131,7 @@ public class RegistrationController extends Dialog implements FxController<Regis
                 stackPane.getChildren().remove(loaderView.getParent());
 
                 NotificationComponent toastyComponent = new NotificationComponent(stackPane);
+                toastyComponent.onClose(() -> Scenes.changeScene("LoginComponent"));
                 toastyComponent.showInformation("Your user has now been registered!");
             });
         });
